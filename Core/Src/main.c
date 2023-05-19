@@ -197,6 +197,17 @@ static void MX_CAN1_Init(void)
 
 }
 
+//for redirecting CAN messages to a function in can.c
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan1)
+{
+  HAL_StatusTypeDef operation_status;
+  operation_status = CAN_Message_Recieved();
+  if(operation_status != HAL_OK)
+  {
+    //TODO: Implement error handling for CAN message recieves
+  }
+}
+
 /**
   * @brief SPI1 Initialization Function
   * @param None
