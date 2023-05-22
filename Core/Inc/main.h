@@ -28,7 +28,6 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32l4xx_hal.h"
-#include "can.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -70,6 +69,14 @@ void Error_Handler(void);
 #define USART_RX_GPIO_Port GPIOA
 #define LD4_Pin GPIO_PIN_5
 #define LD4_GPIO_Port GPIOA
+#define MPPT_Y_POS_SHDN_Pin GPIO_PIN_4
+#define MPPT_Y_POS_SHDN_GPIO_Port GPIOC
+#define MPPT_Y_NEG_SHDN_Pin GPIO_PIN_5
+#define MPPT_Y_NEG_SHDN_GPIO_Port GPIOC
+#define MPPT_X_POS_SHDN_Pin GPIO_PIN_0
+#define MPPT_X_POS_SHDN_GPIO_Port GPIOB
+#define MPPT_X_NEG_SHDN_Pin GPIO_PIN_1
+#define MPPT_X_NEG_SHDN_GPIO_Port GPIOB
 #define TMS_Pin GPIO_PIN_13
 #define TMS_GPIO_Port GPIOA
 #define TCK_Pin GPIO_PIN_14
