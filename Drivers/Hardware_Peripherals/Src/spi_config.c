@@ -1,5 +1,24 @@
+/*
+ * FILENAME: spi_config.c
+ *
+ * DESCRIPTION: Spi configurations for ADC driver.
+ *
+ * AUTHORS:
+ *  - Sanjana RoyChowdhury (sanjana.roy@umsats.ca)
+ *
+ * CREATED ON: May 22, 2023
+ */
+
+
+//###############################################################################################
+//Include Directives
+//###############################################################################################
 #include <stdint.h>
 #include "spi_config.h"
+
+//###############################################################################################
+//Driver Functions
+//###############################################################################################
 
 SPI_HandleTypeDef hspi1;
 SPI_HandleTypeDef hspi2;
