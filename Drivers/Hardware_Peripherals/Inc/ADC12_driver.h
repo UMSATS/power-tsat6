@@ -62,15 +62,15 @@ typedef enum {
 //Prototypes
 //###############################################################################################
 
-ADC12_StatusTypeDef ADC_SPI_Configuration1();
+//ADC12_StatusTypeDef ADC_SPI_Configuration1();
 
 ADC12_StatusTypeDef ADC1_ReadValues(uint16_t* values, size_t numValues);
 
-ADC12_StatusTypeDef ADC_SPI_Configuration2();
+//ADC12_StatusTypeDef ADC_SPI_Configuration2();
 
 ADC12_StatusTypeDef ADC2_ReadValues(uint16_t* values, size_t numValues);
 
-ADC12_StatusTypeDef ADC_SPI_Configuration3();
+//ADC12_StatusTypeDef ADC_SPI_Configuration3();
 
 ADC12_StatusTypeDef ADC3_ReadValues(uint16_t* values, size_t numValues);
 

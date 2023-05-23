@@ -54,6 +54,8 @@
 CAN_HandleTypeDef hcan1;
 
 SPI_HandleTypeDef hspi1;
+SPI_HandleTypeDef hspi2;
+SPI_HandleTypeDef hspi3;
 
 
 UART_HandleTypeDef huart2;
@@ -69,6 +71,9 @@ static void MX_USART2_UART_Init(void);
 static void MX_CAN1_Init(void);
 static void MX_SPI1_Init(void);
 /* USER CODE BEGIN PFP */
+
+
+
 
 /* USER CODE END PFP */
 
@@ -109,6 +114,13 @@ int main(void)
   MX_CAN1_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
+
+  ADC1_Deselect();
+
+  ADC2_Deselect();
+
+  ADC3_Deselect();
+
 
   /* USER CODE END 2 */
 
@@ -352,7 +364,6 @@ static void MX_GPIO_Init(void)
 
   // added from drivers  
 
-
   /* Configure GPIO pins for TPS22810 load switch */
   GPIO_InitStruct.Pin = TPS22810_PAYLOAD_PWR_EN_PIN | TPS22810_ADCS_PWR_EN_PIN | TPS22810_BAT_PWR_EN_PIN;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -417,68 +428,30 @@ static void MX_GPIO_Init(void)
   /* Configure GPIO pins for ADC drivers */
   //ADC Driver 1 
   // Configure DIN pin
-  GPIO_InitStruct.Pin = ADC1_DIN_PIN;
+  GPIO_InitStruct.Pin = ADC1_DIN_PIN | ADC1_DOUT_PIN | ADC1_CS_PIN | ADC1_SCLK_PIN;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  HAL_GPIO_Init(ADC1_GPIO_PORT, &GPIO_InitStruct);
-
-    // Configure DOUT pin
-  GPIO_InitStruct.Pin = ADC1_DOUT_PIN;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(ADC1_GPIO_PORT, &GPIO_InitStruct);
 
-  // Configure CS pin
-  GPIO_InitStruct.Pin = ADC1_CS_PIN;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  HAL_GPIO_Init(ADC1_GPIO_PORT, &GPIO_InitStruct);
-
-    // Configure SCLK pin
-  GPIO_InitStruct.Pin = ADC1_SCLK_PIN;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  HAL_GPIO_Init(ADC1_GPIO_PORT, &GPIO_InitStruct);
-
+  
   //ADC Driver 2
   // Configure DIN pin
-  GPIO_InitStruct.Pin = ADC2_DIN_PIN;
+  GPIO_InitStruct.Pin = ADC2_DIN_PIN | ADC2_DOUT_PIN | ADC2_CS_PIN | ADC2_SCLK_PIN;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  HAL_GPIO_Init(ADC2_GPIO_PORT, &GPIO_InitStruct);
-
-    // Configure DOUT pin
-  GPIO_InitStruct.Pin = ADC2_DOUT_PIN;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  HAL_GPIO_Init(ADC2_GPIO_PORT, &GPIO_InitStruct);
-
-    // Configure CS pin
-  GPIO_InitStruct.Pin = ADC2_CS_PIN;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  HAL_GPIO_Init(ADC2_GPIO_PORT, &GPIO_InitStruct);
-
-    // Configure SCLK pin
-  GPIO_InitStruct.Pin = ADC2_SCLK_PIN;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(ADC2_GPIO_PORT, &GPIO_InitStruct);
 
 
-  // Configure DIN pin
-  GPIO_InitStruct.Pin = ADC3_DIN_PIN;
+  // ADC Driver 3
+  GPIO_InitStruct.Pin = ADC3_DIN_PIN | ADC3_DOUT_PIN | ADC3_CS_PIN | ADC3_SCLK_PIN;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(ADC3_GPIO_PORT, &GPIO_InitStruct);
 
-  // Configure DOUT pin
-  GPIO_InitStruct.Pin = ADC3_DOUT_PIN;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  HAL_GPIO_Init(ADC3_GPIO_PORT, &GPIO_InitStruct);
-
-  // Configure CS pin
-  GPIO_InitStruct.Pin = ADC3_CS_PIN;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  HAL_GPIO_Init(ADC3_GPIO_PORT, &GPIO_InitStruct);
-
-  // Configure SCLK pin
-  GPIO_InitStruct.Pin = ADC3_SCLK_PIN;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  HAL_GPIO_Init(ADC3_GPIO_PORT, &GPIO_InitStruct);
+  
 
 
   

@@ -27,16 +27,17 @@
 //###############################################################################################
 
 // ADC 1
-ADC12_StatusTypeDef ADC_SPI_Configuration1() {
-    
-    // Configure SPI settings (e.g., clock frequency, data format, etc.)
-    SPI1_Configuration();
 
-    // Set the CS pin to low initially
-    ADC1_Deselect();
+// ADC12_StatusTypeDef ADC_SPI_Configuration1() {
 
-    return ADC12_HAL_OK;
-}
+//     // Configure SPI settings (e.g., clock frequency, data format, etc.)
+//     SPI1_Configuration();
+
+//     // Set the CS pin to low initially
+//     ADC1_Deselect();
+
+//     return ADC12_HAL_OK;
+// }
 
 
 void ADC1_Select() {
@@ -110,16 +111,16 @@ ADC12_StatusTypeDef ADC1_ReadValues(uint16_t* values, size_t numValues) {
 }
 
 
-// ADC 2
-ADC12_StatusTypeDef ADC_SPI_Configuration2() {
-    // Configure SPI settings (e.g., clock frequency, data format, etc.)
-    SPI2_Configuration();
+// // ADC 2
+// ADC12_StatusTypeDef ADC_SPI_Configuration2() {
+//     // Configure SPI settings (e.g., clock frequency, data format, etc.)
+//     SPI2_Configuration();
 
-    // Set the CS pin to low initially
-    ADC2_Deselect();
+//     // Set the CS pin to low initially
+//     ADC2_Deselect();
 
-    return ADC12_HAL_OK;
-}
+//     return ADC12_HAL_OK;
+// }
 
 void ADC2_Select() {
     // Set CS pin to low
@@ -180,17 +181,17 @@ ADC12_StatusTypeDef ADC2_ReadValues(uint16_t* values, size_t numValues) {
 
 
 
-// ADC 3
+// // ADC 3
 
-ADC12_StatusTypeDef ADC_SPI_Configuration3() {
-    // Configure SPI settings (e.g., clock frequency, data format, etc.)
-    SPI3_Configuration();
+// ADC12_StatusTypeDef ADC_SPI_Configuration3() {
+//     // Configure SPI settings (e.g., clock frequency, data format, etc.)
+//     SPI3_Configuration();
 
-    // Set the CS pin to low initially
-    ADC3_Deselect();
+//     // Set the CS pin to low initially
+//     ADC3_Deselect();
 
-    return ADC12_HAL_OK;
-}
+//     return ADC12_HAL_OK;
+// }
 
 void ADC3_Select() {
     // Set CS pin to low
