@@ -21,6 +21,17 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdio.h>
+#include <stdlib.h>
+#include "stm32l4xx_hal.h"
+#include "ADC12_driver.h"
+#include "LT365_driver.h"
+#include "LTC11_driver.h"
+#include "LTC29_driver.h"
+#include "LTC41_driver.h"
+#include "spi_config.h"
+#include "TPS_driver.h"
+#include "can.h"
 
 /* USER CODE END Includes */
 
@@ -43,6 +54,7 @@
 CAN_HandleTypeDef hcan1;
 
 SPI_HandleTypeDef hspi1;
+
 
 UART_HandleTypeDef huart2;
 
@@ -285,9 +297,12 @@ static void MX_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOC_CLK_ENABLE();
-  __HAL_RCC_GPIOH_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOE_CLK_ENABLE();
+
+  
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOC, RUN_Pin|MPPT_Y_POS_SHDN_Pin|MPPT_Y_NEG_SHDN_Pin, GPIO_PIN_RESET);
@@ -297,6 +312,8 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, MPPT_X_POS_SHDN_Pin|MPPT_X_NEG_SHDN_Pin, GPIO_PIN_RESET);
+
+
 
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
@@ -330,6 +347,142 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+
+
+  // added from drivers  
+
+
+  /* Configure GPIO pins for TPS22810 load switch */
+  GPIO_InitStruct.Pin = TPS22810_PAYLOAD_PWR_EN_PIN | TPS22810_ADCS_PWR_EN_PIN | TPS22810_BAT_PWR_EN_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(TPS22810_GPIO_Port, &GPIO_InitStruct);
+
+  /* Configure GPIO pins for LTC4150IMS load switch */
+  // Initialize the INT pin 
+  GPIO_InitStruct.Pin = LTC4150IMS_INT_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING; // interrupt mode
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(LTC4150IMS_GPIO_Port, &GPIO_InitStruct);
+
+  // Initialize the POL pin 
+  GPIO_InitStruct.Pin = LTC4150IMS_POL_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD; // od mode
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(LTC4150IMS_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_WritePin(LTC4150IMS_GPIO_Port, LTC4150IMS_POL_PIN, GPIO_PIN_SET); 
+    
+  // Initialize the CLR pin 
+  GPIO_InitStruct.Pin = LTC4150IMS_CLR_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(LTC4150IMS_GPIO_Port, &GPIO_InitStruct);
+
+  // Initialize the SHDN pin 
+  GPIO_InitStruct.Pin = LTC4150IMS_SHDN_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(LTC4150IMS_GPIO_Port, &GPIO_InitStruct);
+
+  /* Configure GPIO pins for watchdog load switch */
+  GPIO_InitStruct.Pin = LTC2917_WDI_Pin | LTC2917_RST_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(LTC2917_GPIO_Port, &GPIO_InitStruct);
+
+  /* Configure GPIO pins for mosfet drivers */
+  // Initialization for the Battery Heater mosfet driver 
+  GPIO_InitStruct.Pin = LTC1154_HEATER_ENABLE_PIN | LTC1154_HEATER_STATUS_PIN | LTC1154_HEATER_IN_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LTC1154_HEATER_GPIO_Port, &GPIO_InitStruct);
+
+  // Initialization for the first BATV NESS mosfet driver 
+  GPIO_InitStruct.Pin = LTC1154_BATV_1_ENABLE_PIN | LTC1154_BATV_1_STATUS_PIN | LTC1154_BATV_1_IN_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LTC1154_BATV_1_GPIO_Port, &GPIO_InitStruct);
+
+  // Initialization for the second BATV NESS mosfet driver 
+  GPIO_InitStruct.Pin = LTC1154_BATV_2_ENABLE_PIN | LTC1154_BATV_2_STATUS_PIN | LTC1154_BATV_2_IN_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(LTC1154_BATV_2_GPIO_Port, &GPIO_InitStruct);
+
+  /* Configure GPIO pins for ADC drivers */
+  //ADC Driver 1 
+  // Configure DIN pin
+  GPIO_InitStruct.Pin = ADC1_DIN_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  HAL_GPIO_Init(ADC1_GPIO_PORT, &GPIO_InitStruct);
+
+    // Configure DOUT pin
+  GPIO_InitStruct.Pin = ADC1_DOUT_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(ADC1_GPIO_PORT, &GPIO_InitStruct);
+
+  // Configure CS pin
+  GPIO_InitStruct.Pin = ADC1_CS_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  HAL_GPIO_Init(ADC1_GPIO_PORT, &GPIO_InitStruct);
+
+    // Configure SCLK pin
+  GPIO_InitStruct.Pin = ADC1_SCLK_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  HAL_GPIO_Init(ADC1_GPIO_PORT, &GPIO_InitStruct);
+
+  //ADC Driver 2
+  // Configure DIN pin
+  GPIO_InitStruct.Pin = ADC2_DIN_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  HAL_GPIO_Init(ADC2_GPIO_PORT, &GPIO_InitStruct);
+
+    // Configure DOUT pin
+  GPIO_InitStruct.Pin = ADC2_DOUT_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  HAL_GPIO_Init(ADC2_GPIO_PORT, &GPIO_InitStruct);
+
+    // Configure CS pin
+  GPIO_InitStruct.Pin = ADC2_CS_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  HAL_GPIO_Init(ADC2_GPIO_PORT, &GPIO_InitStruct);
+
+    // Configure SCLK pin
+  GPIO_InitStruct.Pin = ADC2_SCLK_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  HAL_GPIO_Init(ADC2_GPIO_PORT, &GPIO_InitStruct);
+
+
+  // Configure DIN pin
+  GPIO_InitStruct.Pin = ADC3_DIN_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  HAL_GPIO_Init(ADC3_GPIO_PORT, &GPIO_InitStruct);
+
+  // Configure DOUT pin
+  GPIO_InitStruct.Pin = ADC3_DOUT_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  HAL_GPIO_Init(ADC3_GPIO_PORT, &GPIO_InitStruct);
+
+  // Configure CS pin
+  GPIO_InitStruct.Pin = ADC3_CS_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  HAL_GPIO_Init(ADC3_GPIO_PORT, &GPIO_InitStruct);
+
+  // Configure SCLK pin
+  GPIO_InitStruct.Pin = ADC3_SCLK_PIN;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  HAL_GPIO_Init(ADC3_GPIO_PORT, &GPIO_InitStruct);
+
+
+  
+
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */

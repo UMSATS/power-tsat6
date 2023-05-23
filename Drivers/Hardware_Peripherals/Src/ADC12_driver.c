@@ -28,31 +28,9 @@
 
 // ADC 1
 ADC12_StatusTypeDef ADC_SPI_Configuration1() {
+    
     // Configure SPI settings (e.g., clock frequency, data format, etc.)
     SPI1_Configuration();
-
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
-
-    // Configure DIN pin
-    GPIO_InitStruct.Pin = ADC1_DIN_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    HAL_GPIO_Init(ADC1_GPIO_PORT, &GPIO_InitStruct);
-
-    // Configure DOUT pin
-    GPIO_InitStruct.Pin = ADC1_DOUT_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    HAL_GPIO_Init(ADC1_GPIO_PORT, &GPIO_InitStruct);
-
-    // Configure CS pin
-    GPIO_InitStruct.Pin = ADC1_CS_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    HAL_GPIO_Init(ADC1_GPIO_PORT, &GPIO_InitStruct);
-
-    // Configure SCLK pin
-    GPIO_InitStruct.Pin = ADC1_SCLK_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    HAL_GPIO_Init(ADC1_GPIO_PORT, &GPIO_InitStruct);
-
 
     // Set the CS pin to low initially
     ADC1_Deselect();
@@ -137,28 +115,6 @@ ADC12_StatusTypeDef ADC_SPI_Configuration2() {
     // Configure SPI settings (e.g., clock frequency, data format, etc.)
     SPI2_Configuration();
 
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
-
-    // Configure DIN pin
-    GPIO_InitStruct.Pin = ADC2_DIN_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    HAL_GPIO_Init(ADC2_GPIO_PORT, &GPIO_InitStruct);
-
-    // Configure DOUT pin
-    GPIO_InitStruct.Pin = ADC2_DOUT_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    HAL_GPIO_Init(ADC2_GPIO_PORT, &GPIO_InitStruct);
-
-    // Configure CS pin
-    GPIO_InitStruct.Pin = ADC2_CS_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    HAL_GPIO_Init(ADC2_GPIO_PORT, &GPIO_InitStruct);
-
-    // Configure SCLK pin
-    GPIO_InitStruct.Pin = ADC2_SCLK_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    HAL_GPIO_Init(ADC2_GPIO_PORT, &GPIO_InitStruct);
-
     // Set the CS pin to low initially
     ADC2_Deselect();
 
@@ -229,28 +185,6 @@ ADC12_StatusTypeDef ADC2_ReadValues(uint16_t* values, size_t numValues) {
 ADC12_StatusTypeDef ADC_SPI_Configuration3() {
     // Configure SPI settings (e.g., clock frequency, data format, etc.)
     SPI3_Configuration();
-
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
-
-    // Configure DIN pin
-    GPIO_InitStruct.Pin = ADC3_DIN_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    HAL_GPIO_Init(ADC3_GPIO_PORT, &GPIO_InitStruct);
-
-    // Configure DOUT pin
-    GPIO_InitStruct.Pin = ADC3_DOUT_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    HAL_GPIO_Init(ADC3_GPIO_PORT, &GPIO_InitStruct);
-
-    // Configure CS pin
-    GPIO_InitStruct.Pin = ADC3_CS_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    HAL_GPIO_Init(ADC3_GPIO_PORT, &GPIO_InitStruct);
-
-    // Configure SCLK pin
-    GPIO_InitStruct.Pin = ADC3_SCLK_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    HAL_GPIO_Init(ADC3_GPIO_PORT, &GPIO_InitStruct);
 
     // Set the CS pin to low initially
     ADC3_Deselect();

@@ -24,3 +24,4 @@ void setRun(GPIO_PinState state)
   DCDC_StatusTypeDef operation_status;
   HAL_GPIO_WritePin(operation_status, run, state);
 }
+

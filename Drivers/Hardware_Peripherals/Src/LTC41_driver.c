@@ -32,27 +32,7 @@ uint8_t ltc41InterruptFlag = 0;
 
 void LTC4150IMS_Init(void)
 {
-    // Initialize the INT pin 
-    GPIO_InitTypeDef GPIO_InitStruct = {0};
-    GPIO_InitStruct.Pin = LTC4150IMS_INT_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING; // interrupt mode
-    HAL_GPIO_Init(LTC4150IMS_GPIO_Port, &GPIO_InitStruct);
-
-    // Initialize the POL pin 
-    GPIO_InitStruct.Pin = LTC4150IMS_POL_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD; // od mode
-    HAL_GPIO_Init(LTC4150IMS_GPIO_Port, &GPIO_InitStruct);
-    HAL_GPIO_WritePin(LTC4150IMS_GPIO_Port, LTC4150IMS_POL_PIN, GPIO_PIN_SET); 
     
-    // Initialize the CLR pin 
-    GPIO_InitStruct.Pin = LTC4150IMS_CLR_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    HAL_GPIO_Init(LTC4150IMS_GPIO_Port, &GPIO_InitStruct);
-
-    // Initialize the SHDN pin 
-    GPIO_InitStruct.Pin = LTC4150IMS_SHDN_PIN;
-    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    HAL_GPIO_Init(LTC4150IMS_GPIO_Port, &GPIO_InitStruct);
     LTC4150IMS_DisableShutdown(); 
 
 

@@ -13,15 +13,15 @@
 //###############################################################################################
 // Public Define Directives
 //###############################################################################################
-#define XPos MPPT_X_POS_SHDN
-#define XNeg MPPT_X_NEG_SHDN
-#define YPos MPPT_Y_POS_SHDN
-#define YNeg MPPT_Y_NEG_SHDN
+#define XPos MPPT_X_POS_SHDN_Pin
+#define XNeg MPPT_X_NEG_SHDN_Pin
+#define YPos MPPT_Y_POS_SHDN_Pin
+#define YNeg MPPT_Y_NEG_SHDN_Pin
 
 //###############################################################################################
 // Public Type Definitions
 //###############################################################################################
- typedef enum //alter when implementing error handling
+ typedef enum //alter when implementing error handling (NOTE: change to tracker instead of W25N)
 {
     W25N_HAL_OK                     = HAL_OK,      //0x00
     W25N_HAL_ERROR                  = HAL_ERROR,   //0x01

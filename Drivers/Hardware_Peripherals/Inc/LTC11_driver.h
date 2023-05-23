@@ -45,7 +45,7 @@
 //###############################################################################################
 
 // prototypes for battery heater mosfet driver 
-void LTC1154_HEATER_Init(void);
+//void LTC1154_HEATER_Init(void);
 
 GPIO_PinState LTC1154_HEATER_GetStatus(void);
 
@@ -57,7 +57,7 @@ void LTC1154_HEATER_SetIn(GPIO_PinState state);
 
 // prototypes for BATV NESS mosfet driver 1
 
-void LTC1154_BATV_1_Init(void);
+//void LTC1154_BATV_1_Init(void);
 
 GPIO_PinState LTC1154_BATV_1_GetStatus(void);
 
@@ -68,7 +68,7 @@ void LTC1154_BATV_1_SetIn(GPIO_PinState state);
 
 // prototypes for BATV NESS mosfet driver 2
 
-void LTC1154_BATV_2_Init(void);
+//void LTC1154_BATV_2_Init(void);
 
 GPIO_PinState LTC1154_BATV_2_GetStatus(void);
 
