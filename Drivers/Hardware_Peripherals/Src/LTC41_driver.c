@@ -36,26 +36,22 @@ void LTC4150IMS_Init(void)
     GPIO_InitTypeDef GPIO_InitStruct = {0};
     GPIO_InitStruct.Pin = LTC4150IMS_INT_PIN;
     GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING_FALLING; // interrupt mode
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(LTC4150IMS_GPIO_Port, &GPIO_InitStruct);
 
     // Initialize the POL pin 
     GPIO_InitStruct.Pin = LTC4150IMS_POL_PIN;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_OD; // od mode
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(LTC4150IMS_GPIO_Port, &GPIO_InitStruct);
     HAL_GPIO_WritePin(LTC4150IMS_GPIO_Port, LTC4150IMS_POL_PIN, GPIO_PIN_SET); 
     
     // Initialize the CLR pin 
     GPIO_InitStruct.Pin = LTC4150IMS_CLR_PIN;
     GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(LTC4150IMS_GPIO_Port, &GPIO_InitStruct);
 
     // Initialize the SHDN pin 
     GPIO_InitStruct.Pin = LTC4150IMS_SHDN_PIN;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(LTC4150IMS_GPIO_Port, &GPIO_InitStruct);
     LTC4150IMS_DisableShutdown(); 
 

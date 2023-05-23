@@ -35,7 +35,6 @@ void LTC1154_Heater_Init(void)
     GPIO_InitTypeDef GPIO_InitStruct = {0};
     GPIO_InitStruct.Pin = LTC1154_HEATER_ENABLE_PIN | LTC1154_HEATER_STATUS_PIN | LTC1154_HEATER_IN_PIN;
     GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(LTC1154_HEATER_GPIO_Port, &GPIO_InitStruct);
 }
 
@@ -68,7 +67,6 @@ void LTC1154_BATV_1_Init(void)
     GPIO_InitTypeDef GPIO_InitStruct = {0};
     GPIO_InitStruct.Pin = LTC1154_BATV_1_ENABLE_PIN | LTC1154_BATV_1_STATUS_PIN | LTC1154_BATV_1_IN_PIN;
     GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(LTC1154_BATV_1_GPIO_Port, &GPIO_InitStruct);
 }
 
@@ -98,7 +96,6 @@ void LTC1154_BATV_2_Init(void)
     GPIO_InitTypeDef GPIO_InitStruct = {0};
     GPIO_InitStruct.Pin = LTC1154_BATV_2_ENABLE_PIN | LTC1154_BATV_2_STATUS_PIN | LTC1154_BATV_2_IN_PIN;
     GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(LTC1154_BATV_2_GPIO_Port, &GPIO_InitStruct);
 }
 
