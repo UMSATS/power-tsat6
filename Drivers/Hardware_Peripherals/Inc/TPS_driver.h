@@ -26,14 +26,14 @@
 #define TPS22810_PAYLOAD_PWR_EN_PIN            GPIO_PIN_0
 
 //#define TPS22810_GPIO_Port                     GPIOE
-#define TPS22810_ADCS_PWR_EN_PIN               GPIO_PIN_0
+#define TPS22810_ADCS_PWR_EN_PIN               GPIO_PIN_1
 
 //#define TPS22810_GPIO_Port                     GPIOE
-#define TPS22810_BAT_PWR_EN_PIN                GPIO_PIN_0
+#define TPS22810_BAT_PWR_EN_PIN                GPIO_PIN_2
 
 
 //###############################################################################################
-//Function Prototypes
+//Prototypes
 //###############################################################################################
 
 void TPS22810_Init(void);

@@ -20,6 +20,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32l4xx_it.h"
+#include "LTC41_driver.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* USER CODE END Includes */
@@ -76,6 +78,15 @@ void NMI_Handler(void)
   {
   }
   /* USER CODE END NonMaskableInt_IRQn 1 */
+}
+/**
+  * Handles Interrupt for LTM4150MS.
+  *
+  */
+
+void LTC4150IMS_INT_IRQHandler(void)
+{
+  HAL_GPIO_EXTI_IRQHandler(LTC4150IMS_INT_PIN); // replace with int pin for microcontroller
 }
 
 /**

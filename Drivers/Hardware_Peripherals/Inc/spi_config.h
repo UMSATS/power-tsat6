@@ -1,16 +1,17 @@
 /*
- * FILENAME: LTC29_driver.h
+ * FILENAME: spi_config.h
  *
- * DESCRIPTION: Header for the LTC2917HMS-B1#PBF watchdog / voltage supervisor driver.
+ * DESCRIPTION: Header for Spi configurations for ADC driver
  *
  * AUTHORS:
  *  - Sanjana RoyChowdhury (sanjana.roy@umsats.ca)
  *
- * CREATED ON: May 16, 2023
+ * CREATED ON: May 22, 2023
  */
+
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef HARDWARE_PERIPHERALS_INC_LTC29_DRIVER_H_
-#define HARDWARE_PERIPHERALS_INC_LTC29_DRIVER_H_
+#ifndef HARDWARE_PERIPHERALS_INC_SPI_CONFIG_H_
+#define HARDWARE_PERIPHERALS_INC_SPI_CONFIG_H_
 
 //###############################################################################################
 //Include Directives
@@ -18,25 +19,27 @@
 #include "stm32l4xx_hal.h"
 
 //###############################################################################################
-//Defines
+//Handles and Enumeration
 //###############################################################################################
-#define LTC2917_RST_GPIO_Port GPIOA
-#define LTC2917_RST_Pin GPIO_PIN_0
 
-#define LTC2917_WDI_GPIO_Port GPIOA
-#define LTC2917_WDI_Pin GPIO_PIN_1
+extern SPI_HandleTypeDef hspi1;
+extern SPI_HandleTypeDef hspi2;
+extern SPI_HandleTypeDef hspi3;
+
+typedef enum {
+	ADC12_HAL_OK 		= HAL_OK,
+	ADC12_HAL_ERROR 	= HAL_ERROR,
+	ADC12_HAL_BUSY 	    = HAL_BUSY,
+	ADC12_HAL_TIMEOUT 	= HAL_TIMEOUT
+} ADC12_StatusTypeDef;
+
 
 //###############################################################################################
 //Prototypes
 //###############################################################################################
 
-void LTC2917_Init();
+void SPI1_Configuration();
+void SPI2_Configuration();
+void SPI3_Configuration();
 
-
-void LTC2917_Manual_Reset();
-
-
-void LTC2917_WDI_Toggle();
-
-
-#endif /* HARDWARE_PERIPHERALS_INC_LTC29_DRIVER_H_ */
+#endif /* HARDWARE_PERIPHERALS_INC_SPI_CONFIG_H_ */

@@ -1,20 +1,3 @@
-/**
-  ******************************************************************************
-  * @file           : TPS_driver.c
-  * @brief          : Program for Load Switch
-  ******************************************************************************
-  not a real driver                  3 initializations 
-  ****************************************************************************** **/
-
-
- /**
-  ******************************************************************************
-  * @file           : TPS22810_driver.c
-  * @brief          : Program for TPS22810TDBVRQ1 Load Switch Driver
-  * 
-  ******************************************************************************
-   not a real driver
-  ****************************************************************************** **/
 /*
  * FILENAME: TPS_driver.c
  *
@@ -43,7 +26,6 @@ void TPS22810_Init()
     GPIO_InitTypeDef GPIO_InitStruct = {0};
     GPIO_InitStruct.Pin = TPS22810_PAYLOAD_PWR_EN_PIN | TPS22810_ADCS_PWR_EN_PIN | TPS22810_BAT_PWR_EN_PIN;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(TPS22810_GPIO_Port, &GPIO_InitStruct);
 }
 
