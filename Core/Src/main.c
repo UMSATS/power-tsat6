@@ -395,15 +395,19 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, RUN_Pin|MPPT_Y_POS_SHDN_Pin|MPPT_Y_NEG_SHDN_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, RUN_Pin|MPPT_Y_POS_SHDN_Pin|MPPT_Y_NEG_SHDN_Pin|WD_RST_Pin
+                          |WD_WDI_Pin|CC_SHDN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LD4_GPIO_Port, LD4_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, ADC1_CS_Pin|ADC1_CLCK_Pin|LD4_Pin|CC_Pol_Pin
+                          |Battery_PWR_Pin|ADCS_PWR_Pin|Payload_PWR_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, MPPT_X_POS_SHDN_Pin|MPPT_X_NEG_SHDN_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, MPPT_X_POS_SHDN_Pin|MPPT_X_NEG_SHDN_Pin|ADC2_CS_Pin|ADC2_CLCK_Pin
+                          |ADC3_CLCK_Pin|ADC3_CS_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
@@ -411,32 +415,70 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PGOOD_Pin */
-  GPIO_InitStruct.Pin = PGOOD_Pin;
+  /*Configure GPIO pins : PGOOD_Pin CC_CLR_Pin */
+  GPIO_InitStruct.Pin = PGOOD_Pin|CC_CLR_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(PGOOD_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : RUN_Pin MPPT_Y_POS_SHDN_Pin MPPT_Y_NEG_SHDN_Pin */
-  GPIO_InitStruct.Pin = RUN_Pin|MPPT_Y_POS_SHDN_Pin|MPPT_Y_NEG_SHDN_Pin;
+  /*Configure GPIO pins : RUN_Pin MPPT_Y_POS_SHDN_Pin MPPT_Y_NEG_SHDN_Pin WD_RST_Pin
+                           WD_WDI_Pin CC_SHDN_Pin */
+  GPIO_InitStruct.Pin = RUN_Pin|MPPT_Y_POS_SHDN_Pin|MPPT_Y_NEG_SHDN_Pin|WD_RST_Pin
+                          |WD_WDI_Pin|CC_SHDN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : LD4_Pin */
-  GPIO_InitStruct.Pin = LD4_Pin;
+  /*Configure GPIO pins : ADC1_CS_Pin ADC1_CLCK_Pin LD4_Pin CC_Pol_Pin
+                           Battery_PWR_Pin ADCS_PWR_Pin Payload_PWR_Pin */
+  GPIO_InitStruct.Pin = ADC1_CS_Pin|ADC1_CLCK_Pin|LD4_Pin|CC_Pol_Pin
+                          |Battery_PWR_Pin|ADCS_PWR_Pin|Payload_PWR_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LD4_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : MPPT_X_POS_SHDN_Pin MPPT_X_NEG_SHDN_Pin */
-  GPIO_InitStruct.Pin = MPPT_X_POS_SHDN_Pin|MPPT_X_NEG_SHDN_Pin;
+  /*Configure GPIO pins : MPPT_X_POS_SHDN_Pin MPPT_X_NEG_SHDN_Pin ADC2_CS_Pin ADC2_CLCK_Pin
+                           ADC3_CLCK_Pin ADC3_CS_Pin */
+  GPIO_InitStruct.Pin = MPPT_X_POS_SHDN_Pin|MPPT_X_NEG_SHDN_Pin|ADC2_CS_Pin|ADC2_CLCK_Pin
+                          |ADC3_CLCK_Pin|ADC3_CS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : CC_Int_Pin BatV2_Status_Pin */
+  GPIO_InitStruct.Pin = CC_Int_Pin|BatV2_Status_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : BatV2_In_Pin */
+  GPIO_InitStruct.Pin = BatV2_In_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(BatV2_In_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : BatV2_EN_Pin BatV1_Status_Pin BatV1_In_Pin Heat_In_Pin
+                           Heat_EN_Pin */
+  GPIO_InitStruct.Pin = BatV2_EN_Pin|BatV1_Status_Pin|BatV1_In_Pin|Heat_In_Pin
+                          |Heat_EN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : BatV1_EN_Pin */
+  GPIO_InitStruct.Pin = BatV1_EN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(BatV1_EN_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : Heat_Status_Pin */
+  GPIO_InitStruct.Pin = Heat_Status_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(Heat_Status_GPIO_Port, &GPIO_InitStruct);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
