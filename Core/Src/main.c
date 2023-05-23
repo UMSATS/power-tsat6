@@ -290,10 +290,13 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(RUN_GPIO_Port, RUN_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, RUN_Pin|MPPT_Y_POS_SHDN_Pin|MPPT_Y_NEG_SHDN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LD4_GPIO_Port, LD4_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, MPPT_X_POS_SHDN_Pin|MPPT_X_NEG_SHDN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
@@ -307,12 +310,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(PGOOD_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : RUN_Pin */
-  GPIO_InitStruct.Pin = RUN_Pin;
+  /*Configure GPIO pins : RUN_Pin MPPT_Y_POS_SHDN_Pin MPPT_Y_NEG_SHDN_Pin */
+  GPIO_InitStruct.Pin = RUN_Pin|MPPT_Y_POS_SHDN_Pin|MPPT_Y_NEG_SHDN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(RUN_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
   /*Configure GPIO pin : LD4_Pin */
   GPIO_InitStruct.Pin = LD4_Pin;
@@ -320,6 +323,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LD4_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : MPPT_X_POS_SHDN_Pin MPPT_X_NEG_SHDN_Pin */
+  GPIO_InitStruct.Pin = MPPT_X_POS_SHDN_Pin|MPPT_X_NEG_SHDN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */

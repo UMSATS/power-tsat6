@@ -19,7 +19,8 @@ int checkPGood()
     return HAL_GPIO_ReadPin(operation_status, pgood);
 }
 
-int checkRun()
+void setRun(GPIO_PinState state)
 {
-
+  DCDC_StatusTypeDef operation_status;
+  HAL_GPIO_WritePin(operation_status, run, state);
 }

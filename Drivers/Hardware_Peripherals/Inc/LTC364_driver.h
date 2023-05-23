@@ -60,8 +60,8 @@ int checkPGood();
 /*
  * FUNCTION: checkRun
  *
- * DESCRIPTION: Check that the voltage at the RUN pin indicates normal operation
+ * DESCRIPTION: set the run pin to high when the application code demands
  */
-int checkRun();
+void setRun(GPIO_PinState state);
 
 #endif /* INCLUDE_CAN_H_ */
