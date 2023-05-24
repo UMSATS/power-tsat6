@@ -225,6 +225,21 @@ static void MX_CAN1_Init(void)
 }
 
 /**
+  * @brief Wrapper for CAN message recieved, sends to function in can.c
+  * @param None
+  * @retval None
+  */
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan1)
+{
+  HAL_StatusTypeDef operation_status;
+  operation_status = CAN_Message_Received();
+  if(operation_status != HAL_OK)
+  {
+    //implement error handling
+  }
+}
+
+/**
   * @brief SPI1 Initialization Function
   * @param None
   * @retval None
@@ -402,12 +417,11 @@ static void MX_GPIO_Init(void)
                           |WD_WDI_Pin|CC_SHDN_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, ADC1_CS_Pin|ADC1_CLCK_Pin|LD4_Pin|CC_Pol_Pin
-                          |Battery_PWR_Pin|ADCS_PWR_Pin|Payload_PWR_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, ADC1_CS_Pin|LD4_Pin|CC_Pol_Pin|Battery_PWR_Pin
+                          |ADCS_PWR_Pin|Payload_PWR_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, MPPT_X_POS_SHDN_Pin|MPPT_X_NEG_SHDN_Pin|ADC2_CS_Pin|ADC2_CLCK_Pin
-                          |ADC3_CLCK_Pin|ADC3_CS_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, MPPT_X_POS_SHDN_Pin|MPPT_X_NEG_SHDN_Pin|ADC2_CS_Pin|ADC3_CS_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
@@ -430,19 +444,17 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : ADC1_CS_Pin ADC1_CLCK_Pin LD4_Pin CC_Pol_Pin
-                           Battery_PWR_Pin ADCS_PWR_Pin Payload_PWR_Pin */
-  GPIO_InitStruct.Pin = ADC1_CS_Pin|ADC1_CLCK_Pin|LD4_Pin|CC_Pol_Pin
-                          |Battery_PWR_Pin|ADCS_PWR_Pin|Payload_PWR_Pin;
+  /*Configure GPIO pins : ADC1_CS_Pin LD4_Pin CC_Pol_Pin Battery_PWR_Pin
+                           ADCS_PWR_Pin Payload_PWR_Pin */
+  GPIO_InitStruct.Pin = ADC1_CS_Pin|LD4_Pin|CC_Pol_Pin|Battery_PWR_Pin
+                          |ADCS_PWR_Pin|Payload_PWR_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : MPPT_X_POS_SHDN_Pin MPPT_X_NEG_SHDN_Pin ADC2_CS_Pin ADC2_CLCK_Pin
-                           ADC3_CLCK_Pin ADC3_CS_Pin */
-  GPIO_InitStruct.Pin = MPPT_X_POS_SHDN_Pin|MPPT_X_NEG_SHDN_Pin|ADC2_CS_Pin|ADC2_CLCK_Pin
-                          |ADC3_CLCK_Pin|ADC3_CS_Pin;
+  /*Configure GPIO pins : MPPT_X_POS_SHDN_Pin MPPT_X_NEG_SHDN_Pin ADC2_CS_Pin ADC3_CS_Pin */
+  GPIO_InitStruct.Pin = MPPT_X_POS_SHDN_Pin|MPPT_X_NEG_SHDN_Pin|ADC2_CS_Pin|ADC3_CS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
