@@ -41,7 +41,7 @@
 GPIO_PinState LTC1154_Heater_GetStatus(void)
 {
       // Read the status pin and return state (high or low)
-    return HAL_GPIO_ReadPin(LTC1154_HEATER_GPIO_Port, LTC1154_HEATER_STATUS_PIN);
+    return HAL_GPIO_ReadPin(LTC1154_HEATER_GPIO_S_Port, LTC1154_HEATER_STATUS_PIN);
 }
 
 void LTC1154_Heater_SetEnable(GPIO_PinState state)

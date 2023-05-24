@@ -63,10 +63,10 @@ float LTC4150IMS_GetCurrent(void)
 void LTC4150IMS_Clear(void)
 {
     // Set the CLR pin low for 1us to reset INT
-    HAL_GPIO_WritePin(LTC4150IMS_GPIO_Port, LTC4150IMS_CLR_PIN, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(LTC4150IMS_GPIO_SC_Port, LTC4150IMS_CLR_PIN, GPIO_PIN_RESET);
 
     // Set the CLR pin high again
-    HAL_GPIO_WritePin(LTC4150IMS_GPIO_Port, LTC4150IMS_CLR_PIN, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(LTC4150IMS_GPIO_SC_Port, LTC4150IMS_CLR_PIN, GPIO_PIN_SET);
 }
 
 
@@ -75,12 +75,12 @@ void LTC4150IMS_SetPolarity(uint8_t polarity)
     if (polarity)
     {
         // Set the polarity pin high 
-        HAL_GPIO_WritePin(LTC4150IMS_GPIO_Port, LTC4150IMS_POL_PIN, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(LTC4150IMS_GPIO_PI_Port, LTC4150IMS_POL_PIN, GPIO_PIN_SET);
     }
     else
     {
         // Set the polarity pin low 
-        HAL_GPIO_WritePin(LTC4150IMS_GPIO_Port, LTC4150IMS_POL_PIN, GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(LTC4150IMS_GPIO_PI_Port, LTC4150IMS_POL_PIN, GPIO_PIN_RESET);
     }
 }
 
@@ -89,7 +89,7 @@ void LTC4150IMS_SetPolarity(uint8_t polarity)
 void LTC4150IMS_EnableShutdown(void)
 {
     // Set the SHDN pin low 
-    HAL_GPIO_WritePin(LTC4150IMS_GPIO_Port, LTC4150IMS_SHDN_PIN, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(LTC4150IMS_GPIO_SC_Port, LTC4150IMS_SHDN_PIN, GPIO_PIN_RESET);
 }
 
 
@@ -97,7 +97,7 @@ void LTC4150IMS_EnableShutdown(void)
 void LTC4150IMS_DisableShutdown(void)
 {
     // Set the SHDN pin high 
-    HAL_GPIO_WritePin(LTC4150IMS_GPIO_Port, LTC4150IMS_SHDN_PIN, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(LTC4150IMS_GPIO_SC_Port, LTC4150IMS_SHDN_PIN, GPIO_PIN_SET);
 }
 
 // note to self:  when initializing in main.c need to set flag to 0 
@@ -105,7 +105,7 @@ void LTC4150IMS_INT_IRQHandler(void)
 {
 
   // Clear the interrupt by generating a low pulse on the CLR pin
-  HAL_GPIO_WritePin(LTC4150IMS_GPIO_Port, LTC4150IMS_CLR_PIN, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LTC4150IMS_GPIO_PI_Port, LTC4150IMS_CLR_PIN, GPIO_PIN_RESET);
 
   // Delay for 1 microsecond
   HAL_Delay(1);
@@ -120,7 +120,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   if (GPIO_Pin == LTC4150IMS_INT_PIN)
   {  
       // interrupt handling code ....
-      HAL_GPIO_WritePin(LTC4150IMS_GPIO_Port, LTC4150IMS_CLR_PIN, GPIO_PIN_SET);
+      HAL_GPIO_WritePin(LTC4150IMS_GPIO_PI_Port, LTC4150IMS_CLR_PIN, GPIO_PIN_SET);
 
   }
 }

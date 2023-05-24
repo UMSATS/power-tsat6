@@ -11,8 +11,8 @@
  * CREATED ON: May 15, 2023
  */
 
-#ifndef INCLUDE_DCDC_H_
-#define INCLUDE_DCDC_H_
+#ifndef HARDWARE_PERIPHERALS_INC_DCDC_DRIVER_H_
+#define HARDWARE_PERIPHERALS_INC_DCDC_DRIVER_H_
 
 //###############################################################################################
 // Include Directives
@@ -22,8 +22,8 @@
 //###############################################################################################
 // Public Define Directives
 //###############################################################################################
-#define pgood GPIO_PIN
-#define run RUN_Pin
+#define pgood           PGOOD_Pin
+#define run             RUN_Pin
 
 //###############################################################################################
 // Public Type Definitions
@@ -64,4 +64,4 @@ int checkPGood();
  */
 void setRun(GPIO_PinState state);
 
-#endif /* INCLUDE_CAN_H_ */
+#endif /* HARDWARE_PERIPHERALS_INC_DCDC_DRIVER_H_ */

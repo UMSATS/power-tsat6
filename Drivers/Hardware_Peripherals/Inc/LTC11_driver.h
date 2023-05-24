@@ -23,20 +23,21 @@
 
 // definitions for battery heater mosfet driver 
 #define LTC1154_HEATER_GPIO_Port      GPIOB
-#define LTC1154_HEATER_ENABLE_PIN     GPIO_PIN_0
-#define LTC1154_HEATER_STATUS_PIN     GPIO_PIN_1
-#define LTC1154_HEATER_IN_PIN         GPIO_PIN_2
+#define LTC1154_HEATER_GPIO_S_Port    Heat_Status_GPIO_Port
+#define LTC1154_HEATER_ENABLE_PIN     Heat_EN_Pin
+#define LTC1154_HEATER_STATUS_PIN     Heat_Status_Pin
+#define LTC1154_HEATER_IN_PIN         Heat_In_Pin
 
 // definitions for BATV NESS mosfet drivers
-#define LTC1154_BATV_1_GPIO_Port       GPIOC
-#define LTC1154_BATV_1_ENABLE_PIN      GPIO_PIN_0
-#define LTC1154_BATV_1_STATUS_PIN      GPIO_PIN_1
-#define LTC1154_BATV_1_IN_PIN          GPIO_PIN_2
+#define LTC1154_BATV_1_GPIO_Port       GPIOB
+#define LTC1154_BATV_1_ENABLE_PIN      BatV1_EN_Pin
+#define LTC1154_BATV_1_STATUS_PIN      BatV1_Status_Pin
+#define LTC1154_BATV_1_IN_PIN          BatV1_In_Pin
 
-#define LTC1154_BATV_2_GPIO_Port       GPIOD
-#define LTC1154_BATV_2_ENABLE_PIN      GPIO_PIN_0
-#define LTC1154_BATV_2_STATUS_PIN      GPIO_PIN_1
-#define LTC1154_BATV_2_IN_PIN          GPIO_PIN_2
+#define LTC1154_BATV_2_GPIO_Port       GPIOB
+#define LTC1154_BATV_2_ENABLE_PIN      BatV2_EN_Pin
+#define LTC1154_BATV_2_STATUS_PIN      BatV2_Status_Pin
+#define LTC1154_BATV_2_IN_PIN          BatV2_In_Pin
 
 
 

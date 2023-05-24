@@ -23,11 +23,12 @@
 //###############################################################################################
 
 // Pin definitions
-#define LTC4150IMS_INT_PIN GPIO_PIN_5
-#define LTC4150IMS_GPIO_Port GPIOE
-#define LTC4150IMS_POL_PIN GPIO_PIN_6
-#define LTC4150IMS_CLR_PIN GPIO_PIN_7
-#define LTC4150IMS_SHDN_PIN GPIO_PIN_8
+#define LTC4150IMS_INT_PIN CC_Int_Pin
+#define LTC4150IMS_GPIO_SC_Port GPIOC
+#define LTC4150IMS_GPIO_PI_Port GPIOA
+#define LTC4150IMS_POL_PIN CC_Pol_Pin
+#define LTC4150IMS_CLR_PIN CC_CLR_Pin
+#define LTC4150IMS_SHDN_PIN CC_SHDN_Pin
 
 //global variable
 extern uint8_t ltc41InterruptFlag;

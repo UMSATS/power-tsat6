@@ -24,25 +24,27 @@
 //###############################################################################################
 
 // ADC 1 
-#define ADC1_GPIO_PORT  GPIB
-#define ADC1_DIN_PIN    GPIO_PIN_3
-#define ADC1_DOUT_PIN   GPIO_PIN_4
-#define ADC1_CS_PIN     GPIO_PIN_5
-#define ADC1_SCLK_PIN   GPIO_PIN_6
+#define ADC1_GPIO_PORT  GPIOA
+#define ADC1_DIN_PIN    ADC1_Din_Pin
+#define ADC1_DOUT_PIN   ADC1_Dout_Pin
+#define ADC1_CS_PIN     ADC1_CS_Pin
+#define ADC1_SCLK_PIN   ADC1_CLCK_Pin
 
 // ADC 2 
-#define ADC2_GPIO_PORT  GPIOC
-#define ADC2_DIN_PIN    GPIO_PIN_3
-#define ADC2_DOUT_PIN   GPIO_PIN_4
-#define ADC2_CS_PIN     GPIO_PIN_5
-#define ADC2_SCLK_PIN   GPIO_PIN_6
+#define ADC2_GPIO_D_PORT  GPIOC
+#define ADC2_GPIO_C_PORT  GPIOB
+#define ADC2_DIN_PIN    ADC2_Din_Pin
+#define ADC2_DOUT_PIN   ADC2_Dout_Pin
+#define ADC2_CS_PIN     ADC2_CS_Pin
+#define ADC2_SCLK_PIN   ADC2_CLCK_Pin
 
 // ADC 3 
-#define ADC3_GPIO_PORT  GPIOD
-#define ADC3_DIN_PIN    GPIO_PIN_3
-#define ADC3_DOUT_PIN   GPIO_PIN_4
-#define ADC3_CS_PIN     GPIO_PIN_5
-#define ADC3_SCLK_PIN   GPIO_PIN_6
+#define ADC3_GPIO_CS_PORT  GPIOB
+#define ADC3_GPIO_PORT  GPIOC
+#define ADC3_DIN_PIN    ADC3_Din_Pin
+#define ADC3_DOUT_PIN   ADC3_Dout_Pin
+#define ADC3_CS_PIN     ADC3_CS_Pin
+#define ADC3_SCLK_PIN   ADC3_CLCK_Pin
 
 
 

@@ -22,14 +22,14 @@
 //Defines
 //###############################################################################################
 
-#define TPS22810_GPIO_Port                     GPIOE
-#define TPS22810_PAYLOAD_PWR_EN_PIN            GPIO_PIN_0
+#define TPS22810_GPIO_Port                     GPIOA
+#define TPS22810_PAYLOAD_PWR_EN_PIN            Payload_PWR_Pin
 
 //#define TPS22810_GPIO_Port                     GPIOE
-#define TPS22810_ADCS_PWR_EN_PIN               GPIO_PIN_1
+#define TPS22810_ADCS_PWR_EN_PIN               ADCS_PWR_Pin
 
 //#define TPS22810_GPIO_Port                     GPIOE
-#define TPS22810_BAT_PWR_EN_PIN                GPIO_PIN_2
+#define TPS22810_BAT_PWR_EN_PIN                Battery_PWR_Pin
 
 
 //###############################################################################################

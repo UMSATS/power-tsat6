@@ -20,8 +20,6 @@
 //###############################################################################################
 #include "stm32l4xx_hal.h"
 #include "ADC12_driver.h"
-#include "spi_config.h"
-
 //###############################################################################################
 //Driver Functions
 //###############################################################################################
@@ -124,23 +122,23 @@ ADC12_StatusTypeDef ADC1_ReadValues(uint16_t* values, size_t numValues) {
 
 void ADC2_Select() {
     // Set CS pin to low
-    HAL_GPIO_WritePin(ADC2_GPIO_PORT, ADC2_CS_PIN, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(ADC2_GPIO_C_PORT, ADC2_CS_PIN, GPIO_PIN_RESET);
 }
 
 void ADC2_Deselect() {
     // Set CS pin to high
-    HAL_GPIO_WritePin(ADC2_GPIO_PORT, ADC2_CS_PIN, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(ADC2_GPIO_C_PORT, ADC2_CS_PIN, GPIO_PIN_SET);
 }
 
 
 void ADC2_ClockHigh() {
     // Set SCLK pin to high
-    HAL_GPIO_WritePin(ADC2_GPIO_PORT, ADC2_SCLK_PIN, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(ADC2_GPIO_C_PORT, ADC2_SCLK_PIN, GPIO_PIN_SET);
 }
 
 void ADC2_ClockLow() {
     // Set SCLK pin to low
-    HAL_GPIO_WritePin(ADC2_GPIO_PORT, ADC2_SCLK_PIN, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(ADC2_GPIO_C_PORT, ADC2_SCLK_PIN, GPIO_PIN_RESET);
 }
 
 ADC12_StatusTypeDef ADC2_ReadValues(uint16_t* values, size_t numValues) {
@@ -157,13 +155,13 @@ ADC12_StatusTypeDef ADC2_ReadValues(uint16_t* values, size_t numValues) {
         // clock in data bit by bit
         for (int bit = 7; bit >= 0; --bit) {
             // Set the DIN pin 
-            HAL_GPIO_WritePin(ADC2_GPIO_PORT, ADC2_DIN_PIN, (transmittedData2 >> bit) & 0x01);
+            HAL_GPIO_WritePin(ADC2_GPIO_D_PORT, ADC2_DIN_PIN, (transmittedData2 >> bit) & 0x01);
 
             // Clock high
             ADC2_ClockHigh();
 
             // Shift in received data bit
-            recievedData2 = (recievedData2 << 1) | HAL_GPIO_ReadPin(ADC2_GPIO_PORT, ADC2_DOUT_PIN);
+            recievedData2 = (recievedData2 << 1) | HAL_GPIO_ReadPin(ADC2_GPIO_D_PORT, ADC2_DOUT_PIN);
 
             // Clock low
             ADC2_ClockLow();
@@ -195,12 +193,12 @@ ADC12_StatusTypeDef ADC2_ReadValues(uint16_t* values, size_t numValues) {
 
 void ADC3_Select() {
     // Set CS pin to low
-    HAL_GPIO_WritePin(ADC3_GPIO_PORT, ADC3_CS_PIN, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(ADC3_GPIO_CS_PORT, ADC3_CS_PIN, GPIO_PIN_RESET);
 }
 
 void ADC3_Deselect() {
     // Set CS pin to high
-    HAL_GPIO_WritePin(ADC3_GPIO_PORT, ADC3_CS_PIN, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(ADC3_GPIO_CS_PORT, ADC3_CS_PIN, GPIO_PIN_SET);
 }
 
 void ADC3_ClockHigh() {
