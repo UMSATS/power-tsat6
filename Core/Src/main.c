@@ -139,6 +139,112 @@ int main(void)
 }
 
 /**
+ * @brief handles reset command
+ * 
+ */
+void handleReset(void)
+{
+
+}
+
+/**
+ * @brief handles pld on command
+ * 
+ */
+void handlePLDOn(void)
+{
+
+}
+
+/**
+ * @brief handles pld off command
+ * 
+ */
+void handlePLDOff(void)
+{
+
+}
+
+/**
+ * @brief handles adcs on command
+ * 
+ */
+void handleADCSOn(void)
+{
+
+}
+
+/**
+ * @brief handles adcs off command
+ * 
+ */
+void handleADCSOff(void)
+{
+
+}
+
+/**
+ * @brief handles battery access on command
+ * 
+ */
+void handleBatteryAccessOn(void)
+{
+
+}
+
+/**
+ * @brief handles battery access off command
+ * 
+ */
+void handleBatteryAccessOff(void)
+{
+
+}
+
+/**
+ * @brief handles the battery heater on command
+ * 
+ */
+void handleBatteryHeaterOn(void)
+{
+
+}
+
+/**
+ * @brief handles the battery heater off command
+ * 
+ */
+void handleBatteryHeaterOff(void)
+{
+
+}
+
+/**
+ * @brief handles the check dcdc converter status command
+ * 
+ */
+handleCheckDCDCCOnverterStatus(void)
+{
+  uint32_t status = checkPGood();
+  CANMessage_t package;//ack to carry dcdc status
+  package.priority = 0b0000111;//priority of the original command (replace with an enum for readability?)
+  package.command = 0x01;//ACK -> replace with enum for readability
+  package.data = status;//might need to format it specifically depending on how flexible c wants to be
+  //package.DestinationID =   whatever corresponds with CDH?
+  CAN_Transmit_Message(package);
+}
+
+/**
+ * @brief Collects and sends telemetry information to CDH
+ * @retval None
+ * 
+ */
+void updateCDH(void)
+{
+  CANMessage_t package;
+}
+
+/**
   * @brief System Clock Configuration
   * @retval None
   */

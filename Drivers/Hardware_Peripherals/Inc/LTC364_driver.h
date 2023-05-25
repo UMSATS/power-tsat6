@@ -18,6 +18,7 @@
 // Include Directives
 //###############################################################################################
 #include "stm32l4xx_hal.h"
+#include <stdint.h>
 
 //###############################################################################################
 // Public Define Directives
@@ -55,7 +56,7 @@ typedef enum //alter when implementing error handling
  *
  * DESCRIPTION: Check that the voltage at the PGOOD pin indicates normal operation
  */
-int checkPGood();
+uint32_t checkPGood();//change to uint32_t
 
 /*
  * FUNCTION: checkRun

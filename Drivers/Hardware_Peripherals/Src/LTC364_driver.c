@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include "LTC364_driver.h"
 
-int checkPGood()
+uint32_t checkPGood()
 {
     DCDC_StatusTypeDef operation_status;
     return HAL_GPIO_ReadPin(operation_status, pgood);
