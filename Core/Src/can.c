@@ -17,6 +17,7 @@
 //###############################################################################################
 #include <stdio.h>
 #include "can.h"
+#include "commands.h"
 
 //###############################################################################################
 //Public Functions
@@ -92,17 +93,51 @@ HAL_StatusTypeDef CAN_Message_Received(){
 	receivedDestinationId = RECEIVED_DESTINATION_ID_MASK & rxMessage.StdId;
 
 	if(receivedDestinationId == SOURCE_ID){
-	    // *NOTE* Send message to queue per your subsystem here
+		Can_Message_t package;
+	    package.command = rxData[0];
 
-		// *NOTE* program custom handling per your subsystem here
-		CANMessage_t ping;
-		ping.DestinationID = 0x2;
-		ping.command = rxData[0];
-		ping.priority = 1;
-		for(uint8_t i = 0; i <= 6; i++){
-			ping.data[i] = rxData[i+1] + 1;
+		if(package.command == 0xC0) {
+			handleReset();
+
+		} elif(package.command == 0xC1) {
+
+			handlePLDOn();
+
+		} elif(package.command == 0xC2) {
+			handlePLDOff();
+
+
+		} elif(package.command == 0xC3) {
+			handleADCSOn();
+
+		} elif(package.command == 0xC4) {
+
+			handleADCSOff();
+
+		} elif(package.command == 0xC5) {
+
+			handleBatteryAccessOn();
+
+		} elif(package.command == 0xC6) {
+
+			handleBatteryAccessOff();
+
+		} elif(package.command == 0xC7) {
+
+			handleBatteryHeaterOn();
+
+		}  elif(package.command == 0xC8) {
+
+			handleBatteryHeaterOff();
+			
+		}  elif(package.command == 0xC9) {
+			
+			handleCheckDCDCCOnverterStatus();
+			
 		}
-		operation_status = CAN_Transmit_Message(ping);
+
+
+		}
 	}
 
 error:
