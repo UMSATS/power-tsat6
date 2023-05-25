@@ -21,6 +21,17 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include <stdio.h>
+#include <stdlib.h>
+#include "stm32l4xx_hal.h"
+#include "ADC12_driver.h"
+#include "LT365_driver.h"
+#include "LTC11_driver.h"
+#include "LTC29_driver.h"
+#include "LTC41_driver.h"
+#include "spi_config.h"
+#include "TPS_driver.h"
+#include "can.h"
 
 /* USER CODE END Includes */
 
@@ -43,6 +54,8 @@
 CAN_HandleTypeDef hcan1;
 
 SPI_HandleTypeDef hspi1;
+SPI_HandleTypeDef hspi2;
+SPI_HandleTypeDef hspi3;
 
 UART_HandleTypeDef huart2;
 
@@ -56,7 +69,12 @@ static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 static void MX_CAN1_Init(void);
 static void MX_SPI1_Init(void);
+static void MX_SPI2_Init(void);
+static void MX_SPI3_Init(void);
 /* USER CODE BEGIN PFP */
+
+
+
 
 /* USER CODE END PFP */
 
@@ -96,7 +114,16 @@ int main(void)
   MX_USART2_UART_Init();
   MX_CAN1_Init();
   MX_SPI1_Init();
+  MX_SPI2_Init();
+  MX_SPI3_Init();
   /* USER CODE BEGIN 2 */
+
+  ADC1_Deselect();
+
+  ADC2_Deselect();
+
+  ADC3_Deselect();
+
 
   /* USER CODE END 2 */
 
@@ -104,11 +131,69 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* USER CODE END WHILE */
 
-    /* USER CODE BEGIN 3 */
+    // Send telemetry information to CDH every minute
+    updateCDH();
+    if(!CAN_Queue_IsEmpty(&can_queue))
+      {
+          CANMessage_t package;
+          CAN_Queue_Dequeue(&can_queue, &package);
+    if(package.command == 0xC0) {
+			handleReset();
+
+		} elif(package.command == 0xC1) {
+
+			handlePLDOn();
+
+		} elif(package.command == 0xC2) {
+			handlePLDOff();
+
+
+		} elif(package.command == 0xC3) {
+			handleADCSOn();
+
+		} elif(package.command == 0xC4) {
+
+			handleADCSOff();
+
+		} elif(package.command == 0xC5) {
+
+			handleBatteryAccessOn();
+
+		} elif(package.command == 0xC6) {
+
+			handleBatteryAccessOff();
+
+		} elif(package.command == 0xC7) {
+
+			handleBatteryHeaterOn();
+
+		}  elif(package.command == 0xC8) {
+
+			handleBatteryHeaterOff();
+			
+		}  elif(package.command == 0xC9) {
+			
+			handleCheckDCDCCOnverterStatus();
+			
+		}
+
+    // Delay for one minute
+    HAL_Delay(60000); // Delay in milliseconds 
   }
   /* USER CODE END 3 */
+}
+
+
+
+/**
+ * @brief Collects and sends telemetry information to CDH
+ * @retval None
+ * 
+ */
+void updateCDH(void)
+{
+  CANMessage_t package;
 }
 
 /**
@@ -198,6 +283,21 @@ static void MX_CAN1_Init(void)
 }
 
 /**
+  * @brief Wrapper for CAN message recieved, sends to function in can.c
+  * @param None
+  * @retval None
+  */
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan1)
+{
+  HAL_StatusTypeDef operation_status;
+  operation_status = CAN_Message_Received();
+  if(operation_status != HAL_OK)
+  {
+    //implement error handling
+  }
+}
+
+/**
   * @brief SPI1 Initialization Function
   * @param None
   * @retval None
@@ -234,6 +334,86 @@ static void MX_SPI1_Init(void)
   /* USER CODE BEGIN SPI1_Init 2 */
 
   /* USER CODE END SPI1_Init 2 */
+
+}
+
+/**
+  * @brief SPI2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_SPI2_Init(void)
+{
+
+  /* USER CODE BEGIN SPI2_Init 0 */
+
+  /* USER CODE END SPI2_Init 0 */
+
+  /* USER CODE BEGIN SPI2_Init 1 */
+
+  /* USER CODE END SPI2_Init 1 */
+  /* SPI2 parameter configuration*/
+  hspi2.Instance = SPI2;
+  hspi2.Init.Mode = SPI_MODE_MASTER;
+  hspi2.Init.Direction = SPI_DIRECTION_2LINES;
+  hspi2.Init.DataSize = SPI_DATASIZE_4BIT;
+  hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
+  hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
+  hspi2.Init.NSS = SPI_NSS_SOFT;
+  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
+  hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  hspi2.Init.CRCPolynomial = 7;
+  hspi2.Init.CRCLength = SPI_CRC_LENGTH_DATASIZE;
+  hspi2.Init.NSSPMode = SPI_NSS_PULSE_ENABLE;
+  if (HAL_SPI_Init(&hspi2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN SPI2_Init 2 */
+
+  /* USER CODE END SPI2_Init 2 */
+
+}
+
+/**
+  * @brief SPI3 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_SPI3_Init(void)
+{
+
+  /* USER CODE BEGIN SPI3_Init 0 */
+
+  /* USER CODE END SPI3_Init 0 */
+
+  /* USER CODE BEGIN SPI3_Init 1 */
+
+  /* USER CODE END SPI3_Init 1 */
+  /* SPI3 parameter configuration*/
+  hspi3.Instance = SPI3;
+  hspi3.Init.Mode = SPI_MODE_MASTER;
+  hspi3.Init.Direction = SPI_DIRECTION_2LINES;
+  hspi3.Init.DataSize = SPI_DATASIZE_4BIT;
+  hspi3.Init.CLKPolarity = SPI_POLARITY_LOW;
+  hspi3.Init.CLKPhase = SPI_PHASE_1EDGE;
+  hspi3.Init.NSS = SPI_NSS_SOFT;
+  hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi3.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  hspi3.Init.TIMode = SPI_TIMODE_DISABLE;
+  hspi3.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  hspi3.Init.CRCPolynomial = 7;
+  hspi3.Init.CRCLength = SPI_CRC_LENGTH_DATASIZE;
+  hspi3.Init.NSSPMode = SPI_NSS_PULSE_ENABLE;
+  if (HAL_SPI_Init(&hspi3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN SPI3_Init 2 */
+
+  /* USER CODE END SPI3_Init 2 */
 
 }
 
@@ -288,9 +468,18 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LD4_GPIO_Port, LD4_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, RUN_Pin|MPPT_Y_POS_SHDN_Pin|MPPT_Y_NEG_SHDN_Pin|WD_RST_Pin
+                          |WD_WDI_Pin|CC_SHDN_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, ADC1_CS_Pin|LD4_Pin|CC_Pol_Pin|Battery_PWR_Pin
+                          |ADCS_PWR_Pin|Payload_PWR_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, MPPT_X_POS_SHDN_Pin|MPPT_X_NEG_SHDN_Pin|ADC2_CS_Pin|ADC3_CS_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : B1_Pin */
   GPIO_InitStruct.Pin = B1_Pin;
@@ -298,12 +487,68 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : LD4_Pin */
-  GPIO_InitStruct.Pin = LD4_Pin;
+  /*Configure GPIO pins : PGOOD_Pin CC_CLR_Pin */
+  GPIO_InitStruct.Pin = PGOOD_Pin|CC_CLR_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : RUN_Pin MPPT_Y_POS_SHDN_Pin MPPT_Y_NEG_SHDN_Pin WD_RST_Pin
+                           WD_WDI_Pin CC_SHDN_Pin */
+  GPIO_InitStruct.Pin = RUN_Pin|MPPT_Y_POS_SHDN_Pin|MPPT_Y_NEG_SHDN_Pin|WD_RST_Pin
+                          |WD_WDI_Pin|CC_SHDN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LD4_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : ADC1_CS_Pin LD4_Pin CC_Pol_Pin Battery_PWR_Pin
+                           ADCS_PWR_Pin Payload_PWR_Pin */
+  GPIO_InitStruct.Pin = ADC1_CS_Pin|LD4_Pin|CC_Pol_Pin|Battery_PWR_Pin
+                          |ADCS_PWR_Pin|Payload_PWR_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : MPPT_X_POS_SHDN_Pin MPPT_X_NEG_SHDN_Pin ADC2_CS_Pin ADC3_CS_Pin */
+  GPIO_InitStruct.Pin = MPPT_X_POS_SHDN_Pin|MPPT_X_NEG_SHDN_Pin|ADC2_CS_Pin|ADC3_CS_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : CC_Int_Pin BatV2_Status_Pin */
+  GPIO_InitStruct.Pin = CC_Int_Pin|BatV2_Status_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : BatV2_In_Pin */
+  GPIO_InitStruct.Pin = BatV2_In_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(BatV2_In_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : BatV2_EN_Pin BatV1_Status_Pin BatV1_In_Pin Heat_In_Pin
+                           Heat_EN_Pin */
+  GPIO_InitStruct.Pin = BatV2_EN_Pin|BatV1_Status_Pin|BatV1_In_Pin|Heat_In_Pin
+                          |Heat_EN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : BatV1_EN_Pin */
+  GPIO_InitStruct.Pin = BatV1_EN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(BatV1_EN_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : Heat_Status_Pin */
+  GPIO_InitStruct.Pin = Heat_Status_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(Heat_Status_GPIO_Port, &GPIO_InitStruct);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
