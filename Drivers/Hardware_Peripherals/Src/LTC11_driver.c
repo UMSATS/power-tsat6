@@ -44,6 +44,19 @@ GPIO_PinState LTC1154_Heater_GetStatus(void)
     return HAL_GPIO_ReadPin(LTC1154_HEATER_GPIO_S_Port, LTC1154_HEATER_STATUS_PIN);
 }
 
+void LTC1154_HEATER_ON(void)
+{
+      // turn on battery heater
+    HAL_GPIO_WritePin(LTC1154_HEATER_GPIO_Port, LTC1154_HEATER_ENABLE_PIN, GPIO_PIN_SET);
+}
+
+void LTC1154_HEATER_OFF(void)
+{
+      // turn off battery heater 
+    HAL_GPIO_WritePin(LTC1154_HEATER_GPIO_Port, LTC1154_HEATER_ENABLE_PIN, GPIO_PIN_RESET);
+}
+
+
 void LTC1154_Heater_SetEnable(GPIO_PinState state)
 {
       // Set the state of the enable pin

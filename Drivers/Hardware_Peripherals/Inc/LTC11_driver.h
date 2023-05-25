@@ -54,6 +54,9 @@ void LTC1154_HEATER_SetEnable(GPIO_PinState state);
 
 void LTC1154_HEATER_SetIn(GPIO_PinState state);
 
+void LTC1154_HEATER_ON(void);
+
+void LTC1154_Heater_OFF(void);
 
 
 // prototypes for BATV NESS mosfet driver 1

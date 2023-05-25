@@ -39,13 +39,13 @@
 
 
 void ADC1_Select() {
-    // set CS pin to low
-    HAL_GPIO_WritePin(ADC1_GPIO_PORT, ADC1_CS_PIN, GPIO_PIN_RESET);
+    // set CS pin to high
+    HAL_GPIO_WritePin(ADC1_GPIO_PORT, ADC1_CS_PIN, GPIO_PIN_SET);
 }
 
 void ADC1_Deselect() {
-    // set CS pin to high
-    HAL_GPIO_WritePin(ADC1_GPIO_PORT, ADC1_CS_PIN, GPIO_PIN_SET);
+    // set CS pin to low
+    HAL_GPIO_WritePin(ADC1_GPIO_PORT, ADC1_CS_PIN, GPIO_PIN_RESET);
 }
 
 
@@ -122,12 +122,12 @@ ADC12_StatusTypeDef ADC1_ReadValues(uint16_t* values, size_t numValues) {
 
 void ADC2_Select() {
     // Set CS pin to low
-    HAL_GPIO_WritePin(ADC2_GPIO_C_PORT, ADC2_CS_PIN, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(ADC2_GPIO_C_PORT, ADC2_CS_PIN, GPIO_PIN_SET);
 }
 
 void ADC2_Deselect() {
     // Set CS pin to high
-    HAL_GPIO_WritePin(ADC2_GPIO_C_PORT, ADC2_CS_PIN, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(ADC2_GPIO_C_PORT, ADC2_CS_PIN, GPIO_PIN_RESET);
 }
 
 
@@ -193,12 +193,12 @@ ADC12_StatusTypeDef ADC2_ReadValues(uint16_t* values, size_t numValues) {
 
 void ADC3_Select() {
     // Set CS pin to low
-    HAL_GPIO_WritePin(ADC3_GPIO_CS_PORT, ADC3_CS_PIN, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(ADC3_GPIO_CS_PORT, ADC3_CS_PIN, GPIO_PIN_SET);
 }
 
 void ADC3_Deselect() {
     // Set CS pin to high
-    HAL_GPIO_WritePin(ADC3_GPIO_CS_PORT, ADC3_CS_PIN, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(ADC3_GPIO_CS_PORT, ADC3_CS_PIN, GPIO_PIN_RESET);
 }
 
 void ADC3_ClockHigh() {
