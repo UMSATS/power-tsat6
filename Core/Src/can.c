@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include "can.h"
 #include "commands.h"
+#include "can_message_queue.h"
 
 //###############################################################################################
 //Public Functions
@@ -94,52 +95,14 @@ HAL_StatusTypeDef CAN_Message_Received(){
 
 	if(receivedDestinationId == SOURCE_ID){
 		Can_Message_t package;
-	    package.command = rxData[0];
 
-		if(package.command == 0xC0) {
-			handleReset();
-
-		} elif(package.command == 0xC1) {
-
-			handlePLDOn();
-
-		} elif(package.command == 0xC2) {
-			handlePLDOff();
-
-
-		} elif(package.command == 0xC3) {
-			handleADCSOn();
-
-		} elif(package.command == 0xC4) {
-
-			handleADCSOff();
-
-		} elif(package.command == 0xC5) {
-
-			handleBatteryAccessOn();
-
-		} elif(package.command == 0xC6) {
-
-			handleBatteryAccessOff();
-
-		} elif(package.command == 0xC7) {
-
-			handleBatteryHeaterOn();
-
-		}  elif(package.command == 0xC8) {
-
-			handleBatteryHeaterOff();
-			
-		}  elif(package.command == 0xC9) {
-			
-			handleCheckDCDCCOnverterStatus();
-			
-		}
-
-
-		}
+		CANMessage_t can_message = {
+	        .priority = rxMessage.RTR == CAN_RTR_REMOTE ? 0x7F : rxMessage.ExtId >> 24,
+	        .SenderID = (RECEIVED_SENDER_ID_MASK & rxMessage.StdId) >> 2,
+	        .DestinationID = receivedDestinationId,
+	        .command = rxData[0],
+	        .data = {rxData[1], rxData[2], rxData[3], rxData[4], rxData[5], rxData[6], rxData[7]}
+	    };
+	    CAN_Queue_Enqueue(&can_queue, &can_message);
 	}
-
-error:
-	return operation_status;
 }

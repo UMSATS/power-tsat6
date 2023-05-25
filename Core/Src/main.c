@@ -134,6 +134,49 @@ int main(void)
 
     // Send telemetry information to CDH every minute
     updateCDH();
+    if(!CAN_Queue_IsEmpty(&can_queue))
+      {
+          CANMessage_t package;
+          CAN_Queue_Dequeue(&can_queue, &package);
+    if(package.command == 0xC0) {
+			handleReset();
+
+		} elif(package.command == 0xC1) {
+
+			handlePLDOn();
+
+		} elif(package.command == 0xC2) {
+			handlePLDOff();
+
+
+		} elif(package.command == 0xC3) {
+			handleADCSOn();
+
+		} elif(package.command == 0xC4) {
+
+			handleADCSOff();
+
+		} elif(package.command == 0xC5) {
+
+			handleBatteryAccessOn();
+
+		} elif(package.command == 0xC6) {
+
+			handleBatteryAccessOff();
+
+		} elif(package.command == 0xC7) {
+
+			handleBatteryHeaterOn();
+
+		}  elif(package.command == 0xC8) {
+
+			handleBatteryHeaterOff();
+			
+		}  elif(package.command == 0xC9) {
+			
+			handleCheckDCDCCOnverterStatus();
+			
+		}
 
     // Delay for one minute
     HAL_Delay(60000); // Delay in milliseconds 

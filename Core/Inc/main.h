@@ -22,12 +22,14 @@
 #ifndef __MAIN_H
 #define __MAIN_H
 
-#ifdef __cplusplus
+#ifdef __cplusplus"
 extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32l4xx_hal.h"
+#include "commands.h"
+#include "can_message_queue.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
