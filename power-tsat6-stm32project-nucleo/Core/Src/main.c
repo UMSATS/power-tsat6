@@ -239,19 +239,6 @@ void updateCDH(void)
   uint8_t current7 = static_cast<uint8_t>(static_cast<float>(voltage7) / SHUNT_RESISTOR7);
   uint8_t current8 = static_cast<uint8_t>(static_cast<float>(voltage8) / SHUNT_RESISTOR8);
 
-  uint32_t batteryChargeReading= charge;
-  packageTemp;
-
-  packageTemp.priority = 0b0000001;//priority of the original command (replace with an enum for readability?)
-  packageTemp.SenderID = SOURCE_ID;
-  packageTemp.DestinationID = 0x1; // cdh destination
-  packageTemp.command = 0x31;
-  for (int i = 0; i < sizeof(status); ++i) {
-    packageTemp.data[i + 1] = (batteryChargeReading >> (8 * i)) & 0xFF;
-
-   operation_status = CAN_Transmit_Message(message1);
-    if (operation_status != HAL_OK) goto error;
-
   CANMessage_t packageCurrent1;
   packageCurrent.priority = 0b0000001;//priority of the original command (replace with an enum for readability?)
   packageCurrent.SenderID = SOURCE_ID;
@@ -344,7 +331,18 @@ void updateCDH(void)
 
 
   // battery charge 
+  uint32_t batteryChargeReading= charge;
+  CANMessage_t packageCharge;
 
+  packageCharge.priority = 0b0000001;//priority of the original command (replace with an enum for readability?)
+  packageCharge.SenderID = SOURCE_ID;
+  packageCharge.DestinationID = 0x1; // cdh destination
+  packageCharge.command = 0x31;
+  for (int i = 0; i < sizeof(status); ++i) {
+    packageCharge.data[i + 1] = (batteryChargeReading >> (8 * i)) & 0xFF;
+
+   operation_status = CAN_Transmit_Message(packageCharge);
+    if (operation_status != HAL_OK) goto error;
 
 
 
