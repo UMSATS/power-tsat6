@@ -204,7 +204,7 @@ void updateCDH(void)
 {
 
   //temperature reading 
-  uint16_t batteryTemperatureReading= ADC3_ReadValue_BatteryTemp();
+  uint16_t batteryTemperatureReading= ADC3_ReadValue_BatteryTemp(); // read as 16 bits
   CANMessage_t packageTemp;
 
   packageTemp.priority = 0b0000001;//priority of the original command (replace with an enum for readability?)
@@ -215,26 +215,125 @@ void updateCDH(void)
   packageTemp.data[1] = batteryTemperatureReading & 0xFF;  // Lower byte of the temperature
 
 
-   operation_status = CAN_Transmit_Message(message1);
+   operation_status = CAN_Transmit_Message(packageTemp);
     if (operation_status != HAL_OK) goto error;
 
-  //
+  //read voltages
+  uint8_t voltage1 = ADC_Vout_Reading1();
+  uint8_t voltage2 = ADC_Vout_Reading2();
+  uint8_t voltage3 = ADC_Vout_Reading3();
+  uint8_t voltage4 = ADC_Vout_Reading4();
+  uint8_t voltage5 = ADC_Vout_Reading5();
+  uint8_t voltage6 = ADC_Vout_Reading6();
+  uint8_t voltage7 = ADC_Vout_Reading7();
+  uint8_t voltage8 = ADC_Vout_Reading8();
+  uint8_t voltage9 = ADC_Vout_Reading9();
+
+  // read currents 
+  uint8_t current1 = static_cast<uint8_t>(static_cast<float>(voltage1) / SHUNT_RESISTOR1);
+  uint8_t current2 = static_cast<uint8_t>(static_cast<float>(voltage2) / SHUNT_RESISTOR2);
+  uint8_t current3 = static_cast<uint8_t>(static_cast<float>(voltage3) / SHUNT_RESISTOR3);
+  uint8_t current4 = static_cast<uint8_t>(static_cast<float>(voltage4) / SHUNT_RESISTOR4);
+  uint8_t current5 = static_cast<uint8_t>(static_cast<float>(voltage5) / SHUNT_RESISTOR5);
+  uint8_t current6 = static_cast<uint8_t>(static_cast<float>(voltage6) / SHUNT_RESISTOR6);
+  uint8_t current7 = static_cast<uint8_t>(static_cast<float>(voltage7) / SHUNT_RESISTOR7);
+  uint8_t current8 = static_cast<uint8_t>(static_cast<float>(voltage8) / SHUNT_RESISTOR8);
 
 
+  CANMessage_t packageCurrent1;
+  packageCurrent.priority = 0b0000001;//priority of the original command (replace with an enum for readability?)
+  packageCurrent.SenderID = SOURCE_ID;
+  packageCurrent.DestinationID = 0x1; // cdh destination
+  packageCurrent.command = 0x32;
+  packageCurrent.data[0] = CURRENT_SENSOR_ID_1;
+  packageCurrent.data[1] = current1;
 
 
+  operation_status = CAN_Transmit_Message(packageCurrent1);
+    if (operation_status != HAL_OK) goto error;
+
+  CANMessage_t packageCurrent2;
+  packageCurrent2.priority = 0b0000001;//priority of the original command (replace with an enum for readability?)
+  packageCurrent2.SenderID = SOURCE_ID;
+  packageCurrent2.DestinationID = 0x1; // cdh destination
+  packageCurrent2.command = 0x32;
+  packageCurrent2.data[0] = CURRENT_SENSOR_ID_2;
+  packageCurrent2.data[1] = current2;
+
+  operation_status = CAN_Transmit_Message(packageCurrent2);
+    if (operation_status != HAL_OK) goto error;
+
+  CANMessage_t packageCurrent3;
+  packageCurrent3.priority = 0b0000001;//priority of the original command (replace with an enum for readability?)
+  packageCurrent3.SenderID = SOURCE_ID;
+  packageCurrent3.DestinationID = 0x1; // cdh destination
+  packageCurrent3.command = 0x32;
+  packageCurrent3.data[0] = CURRENT_SENSOR_ID_3;
+  packageCurrent3.data[1] = current3;
+
+  operation_status = CAN_Transmit_Message(packageCurrent3);
+    if (operation_status != HAL_OK) goto error;
+
+  CANMessage_t packageCurrent4;
+  packageCurrent4.priority = 0b0000001;//priority of the original command (replace with an enum for readability?)
+  packageCurrent4.SenderID = SOURCE_ID;
+  packageCurrent4.DestinationID = 0x1; // cdh destination
+  packageCurrent4.command = 0x32;
+  packageCurrent4.data[0] = CURRENT_SENSOR_ID_4;
+  packageCurrent4.data[1] = current4;
+
+  operation_status = CAN_Transmit_Message(packageCurrent4);
+    if (operation_status != HAL_OK) goto error;
+
+  CANMessage_t packageCurrent5;
+  packageCurrent5.priority = 0b0000001;//priority of the original command (replace with an enum for readability?)
+  packageCurrent5.SenderID = SOURCE_ID;
+  packageCurrent5.DestinationID = 0x1; // cdh destination
+  packageCurrent5.command = 0x32;
+  packageCurrent5.data[0] = CURRENT_SENSOR_ID_5;
+  packageCurrent5.data[1] = current5;
+
+  operation_status = CAN_Transmit_Message(packageCurrent5);
+    if (operation_status != HAL_OK) goto error;
+
+  CANMessage_t packageCurrent6;
+  packageCurrent6.priority = 0b0000001;//priority of the original command (replace with an enum for readability?)
+  packageCurrent6.SenderID = SOURCE_ID;
+  packageCurrent6.DestinationID = 0x1; // cdh destination
+  packageCurrent6.command = 0x32;
+  packageCurrent6.data[0] = CURRENT_SENSOR_ID_6;
+  packageCurrent6.data[1] = current6;
+
+  operation_status = CAN_Transmit_Message(packageCurrent6);
+    if (operation_status != HAL_OK) goto error;
 
 
+  CANMessage_t packageCurrent7;
+  packageCurrent7.priority = 0b0000001;//priority of the original command (replace with an enum for readability?)
+  packageCurrent7.SenderID = SOURCE_ID;
+  packageCurrent7.DestinationID = 0x1; // cdh destination
+  packageCurrent7.command = 0x32;
+  packageCurrent7.data[0] = CURRENT_SENSOR_ID_7;
+  packageCurrent7.data[1] = current7;
+
+  operation_status = CAN_Transmit_Message(packageCurrent7);
+    if (operation_status != HAL_OK) goto error;
+
+  CANMessage_t packageCurrent8;
+  packageCurrent8.priority = 0b0000001;//priority of the original command (replace with an enum for readability?)
+  packageCurrent8.SenderID = SOURCE_ID;
+  packageCurrent8.DestinationID = 0x1; // cdh destination
+  packageCurrent8.command = 0x32;
+  packageCurrent8.data[0] = CURRENT_SENSOR_ID_8;
+  packageCurrent8.data[1] = current8;
+
+  operation_status = CAN_Transmit_Message(packageCurrent8);
+    if (operation_status != HAL_OK) goto error;
 
 
-  
+  // battery charge 
 
 
-
-
-
-
-  CAN_Transmit_Message(packageTemp);
 
 
 

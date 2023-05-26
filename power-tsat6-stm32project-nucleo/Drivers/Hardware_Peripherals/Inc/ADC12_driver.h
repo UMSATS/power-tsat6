@@ -47,6 +47,28 @@
 #define ADC3_SCLK_PIN   ADC3_CLCK_Pin
 
 
+//for current readings
+#define SHUNT_RESISTOR1   0.02f
+#define SHUNT_RESISTOR2   0.02f
+#define SHUNT_RESISTOR3   0.02f
+#define SHUNT_RESISTOR4   0.01f
+#define SHUNT_RESISTOR5   0.03f
+#define SHUNT_RESISTOR6   0.03f
+#define SHUNT_RESISTOR7   0.015f
+#define SHUNT_RESISTOR8   0.015f
+
+// current sensor ids 
+#define CURRENT_SENSOR_ID_1 0x1
+#define CURRENT_SENSOR_ID_2 0x2
+#define CURRENT_SENSOR_ID_3 0x3
+#define CURRENT_SENSOR_ID_4 0x4
+#define CURRENT_SENSOR_ID_5 0x5
+#define CURRENT_SENSOR_ID_6 0x6
+#define CURRENT_SENSOR_ID_7 0x7
+#define CURRENT_SENSOR_ID_8 0x8
+
+
+
 
 //###############################################################################################
 // Enumeration
@@ -80,6 +102,8 @@ ADC12_StatusTypeDef ADC3_ReadValues(uint16_t* values, size_t numValues);
 uint16_t ADC3_ReadValue_BatteryTemp();
 
 
+
+
 void ADC1_Select(void);
 void ADC1_Deselect(void);
 void ADC1_ClockHigh(void);
@@ -92,6 +116,16 @@ void ADC3_Select(void);
 void ADC3_Deselect(void);
 void ADC3_ClockHigh(void);
 void ADC3_ClockLow(void);
+
+
+uint8_t ADC_Vout_Reading1();
+uint8_t ADC_Vout_Reading2();
+uint8_t ADC_Vout_Reading3();
+uint8_t ADC_Vout_Reading4();
+uint8_t ADC_Vout_Reading5();
+uint8_t ADC_Vout_Reading6();
+uint8_t ADC_Vout_Reading7();
+uint8_t ADC_Vout_Reading8();
 
 
 
