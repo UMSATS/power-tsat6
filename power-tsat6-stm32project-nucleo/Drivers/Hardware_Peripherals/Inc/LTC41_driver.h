@@ -32,6 +32,7 @@
 
 //global variable
 extern uint8_t ltc41InterruptFlag;
+extern uint32_t charge;
 
 // Shunt resistor value in ohms
 #define SHUNT_RESISTOR_VALUE 10000.0f // 10k resistor 
@@ -39,6 +40,9 @@ extern uint8_t ltc41InterruptFlag;
 // ADC parameters
 #define ADC_RESOLUTION 3.3f // ADC reference voltage 
 #define ADC_MAX_VALUE 4096 // Max ADC value 
+#define VOLT_FREQ_GAIN 32.55f
+#define R_SENSE 0.01f
+#define CHARGE_MEM_LOCATION 0x0801FC00
 
 
 

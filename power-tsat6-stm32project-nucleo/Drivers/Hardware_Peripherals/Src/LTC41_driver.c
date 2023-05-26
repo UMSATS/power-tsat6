@@ -39,7 +39,7 @@ void LTC4150IMS_Init(void)
     // Configure the interrupt for the INT pin
     HAL_NVIC_SetPriority(EXTI0_IRQn , 0, 0);
     HAL_NVIC_EnableIRQ(EXTI0_IRQn);  //replace interupt line with correct for microcontroller
-
+    charge = 12060;//Capacity of the battery
 }
 
 
@@ -120,6 +120,17 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
   if (GPIO_Pin == LTC4150IMS_INT_PIN)
   {  
       // interrupt handling code ....
+      DCDC_StatusTypeDef operation_status;
+      float chargeChange = 1/(VOLT_FREQ_GAIN*R_SENSE);//change in charge in coulombs
+      GPIO_PinState polarity = HAL_GPIO_ReadPin(operation_status, LTC4150IMS_POL_PIN);
+      if(polarity == GPIO_PIN_SET)
+      {
+        charge += chargeChange;
+      }
+      else if(polarity == GPIO_PIN_RESET)
+      {
+        charge -= chargeChange;
+      }
       HAL_GPIO_WritePin(LTC4150IMS_GPIO_PI_Port, LTC4150IMS_CLR_PIN, GPIO_PIN_SET);
 
   }
