@@ -210,7 +210,7 @@ void updateCDH(void)
   packageTemp.priority = 0b0000001;//priority of the original command (replace with an enum for readability?)
   packageTemp.SenderID = SOURCE_ID;
   packageTemp.DestinationID = 0x1; // cdh destination
-  packageTemp.command = 0x31;
+  packageTemp.command = 0x30;
   packageTemp.data[0] = (batteryTemperatureReading >> 8) & 0xFF;  // Higher byte of the temperature
   packageTemp.data[1] = batteryTemperatureReading & 0xFF;  // Lower byte of the temperature
 
@@ -220,6 +220,18 @@ void updateCDH(void)
 
   //
 
+  uint32_t batteryChargeReading= charge;
+  packageTemp;
+
+  packageTemp.priority = 0b0000001;//priority of the original command (replace with an enum for readability?)
+  packageTemp.SenderID = SOURCE_ID;
+  packageTemp.DestinationID = 0x1; // cdh destination
+  packageTemp.command = 0x31;
+  for (int i = 0; i < sizeof(status); ++i) {
+    packageTemp.data[i + 1] = (batteryChargeReading >> (8 * i)) & 0xFF;
+
+   operation_status = CAN_Transmit_Message(message1);
+    if (operation_status != HAL_OK) goto error;
 
 
 

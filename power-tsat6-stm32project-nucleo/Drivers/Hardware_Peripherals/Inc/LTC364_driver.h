@@ -56,7 +56,7 @@ typedef enum //alter when implementing error handling
  *
  * DESCRIPTION: Check that the voltage at the PGOOD pin indicates normal operation
  */
-uint32_t checkPGood();//change to uint32_t
+uint8_t checkPGood();//change to uint32_t
 
 /*
  * FUNCTION: checkRun
