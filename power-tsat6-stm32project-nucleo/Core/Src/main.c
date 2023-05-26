@@ -31,6 +31,7 @@
 #include "LTC41_driver.h"
 #include "spi_config.h"
 #include "TPS_driver.h"
+#include "can_message_queue.h"
 #include "can.h"
 
 /* USER CODE END Includes */
@@ -118,11 +119,18 @@ int main(void)
   MX_SPI3_Init();
   /* USER CODE BEGIN 2 */
 
+
+  CAN_Queue_Init(&can_queue);
+
   ADC1_Deselect();
 
   ADC2_Deselect();
 
   ADC3_Deselect();
+
+  HAL_StatusTypeDef can_operation_status;
+  can_operation_status = CAN_Init();
+  if (can_operation_status != HAL_OK) goto error;
 
 
   /* USER CODE END 2 */
@@ -134,6 +142,7 @@ int main(void)
 
     // Send telemetry information to CDH every minute
     updateCDH();
+
     if(!CAN_Queue_IsEmpty(&can_queue))
       {
           CANMessage_t package;
@@ -193,7 +202,44 @@ int main(void)
  */
 void updateCDH(void)
 {
-  CANMessage_t package;
+
+  //temperature reading 
+  uint16_t batteryTemperatureReading= ADC3_ReadValue_BatteryTemp();
+  CANMessage_t packageTemp;
+
+  packageTemp.priority = 0b0000001;//priority of the original command (replace with an enum for readability?)
+  packageTemp.SenderID = SOURCE_ID;
+  packageTemp.DestinationID = 0x1; // cdh destination
+  packageTemp.command = 0x31;
+  packageTemp.data[0] = (batteryTemperatureReading >> 8) & 0xFF;  // Higher byte of the temperature
+  packageTemp.data[1] = batteryTemperatureReading & 0xFF;  // Lower byte of the temperature
+
+
+   operation_status = CAN_Transmit_Message(message1);
+    if (operation_status != HAL_OK) goto error;
+
+  //
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  CAN_Transmit_Message(packageTemp);
+
+
+
+
+
 }
 
 /**

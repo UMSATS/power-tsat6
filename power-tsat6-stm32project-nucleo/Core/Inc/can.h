@@ -32,10 +32,12 @@ extern CAN_HandleTypeDef hcan1; // Set this to the CAN type found in generated m
 //###############################################################################################
 typedef struct{
 	uint8_t priority; // Priority of the message, MAX VALUE: 0x7F
+	uint8_t SenderID; // // The ID number of the sending device, MAX VALUE: 0x3
 	uint8_t DestinationID; // The ID number of the destination device, MAX VALUE: 0x3
 	uint8_t command; // The command value
 	uint8_t data[7]; // Message
 } CANMessage_t;
+
 
 //###############################################################################################
 // Public Function Prototypes
