@@ -304,29 +304,29 @@ ADC12_StatusTypeDef ADC3_ReadValues(uint16_t* values, size_t numValues) {
   // need to make changes based on which ADC and channel
 uint8_t ADC_Vout_Reading1() {  
     // Select input channel for VOUT
-    uint8_t transmittedData3 = 0x00;  // depends on input channel
+    uint8_t transmittedData3 = 0x08;  // depends on input channel
 
     // Select the ADC
-    ADC3_Select();
+    ADC2_Select();
 
     // Perform SPI communication with ADC128S102
     uint8_t receivedData3 = 0;
     for (int bit = 7; bit >= 0; --bit) {
         // Set the DIN pin
-        HAL_GPIO_WritePin(ADC3_GPIO_PORT, ADC3_DIN_PIN, (transmittedData3 >> bit) & 0x01);
+        HAL_GPIO_WritePin(ADC2_GPIO_D_PORT, ADC2_DIN_PIN, (transmittedData3 >> bit) & 0x01);
 
         // Clock high
-        ADC3_ClockHigh();
+        ADC2_ClockHigh();
 
         // Shift in received data bit
-        receivedData3 = (receivedData3 << 1) | HAL_GPIO_ReadPin(ADC3_GPIO_PORT, ADC3_DOUT_PIN);
+        receivedData3 = (receivedData3 << 1) | HAL_GPIO_ReadPin(ADC2_GPIO_D_PORT, ADC2_DOUT_PIN);
 
         // Clock low
-        ADC3_ClockLow();
+        ADC2_ClockLow();
     }
 
     // Deselect the ADC
-    ADC3_Deselect();
+    ADC2_Deselect();
 
     return receivedData3;
 }
@@ -334,29 +334,29 @@ uint8_t ADC_Vout_Reading1() {
 
 uint8_t ADC_Vout_Reading2() {  
     // Select input channel for VOUT
-    uint8_t transmittedData3 = 0x00;  // depends on input channel
+    uint8_t transmittedData3 = 0x10;  // depends on input channel
 
     // Select the ADC
-    ADC3_Select();
+    ADC1_Select();
 
     // Perform SPI communication with ADC128S102
     uint8_t receivedData3 = 0;
     for (int bit = 7; bit >= 0; --bit) {
         // Set the DIN pin
-        HAL_GPIO_WritePin(ADC3_GPIO_PORT, ADC3_DIN_PIN, (transmittedData3 >> bit) & 0x01);
+        HAL_GPIO_WritePin(ADC1_GPIO_PORT, ADC1_DIN_PIN, (transmittedData3 >> bit) & 0x01);
 
         // Clock high
-        ADC3_ClockHigh();
+        ADC1_ClockHigh();
 
         // Shift in received data bit
-        receivedData3 = (receivedData3 << 1) | HAL_GPIO_ReadPin(ADC3_GPIO_PORT, ADC3_DOUT_PIN);
+        receivedData3 = (receivedData3 << 1) | HAL_GPIO_ReadPin(ADC1_GPIO_PORT, ADC1_DOUT_PIN);
 
         // Clock low
-        ADC3_ClockLow();
+        ADC1_ClockLow();
     }
 
     // Deselect the ADC
-    ADC3_Deselect();
+    ADC1_Deselect();
 
     return receivedData3;
 }
@@ -364,7 +364,7 @@ uint8_t ADC_Vout_Reading2() {
 
 uint8_t ADC_Vout_Reading3() {  
     // Select input channel for VOUT
-    uint8_t transmittedData3 = 0x00;  // depends on input channel
+    uint8_t transmittedData3 = 0x0C;  // depends on input channel
 
     // Select the ADC
     ADC3_Select();
@@ -394,29 +394,29 @@ uint8_t ADC_Vout_Reading3() {
 
 uint8_t ADC_Vout_Reading4() {  
     // Select input channel for VOUT
-    uint8_t transmittedData3 = 0x00;  // depends on input channel
+    uint8_t transmittedData3 = 0x04;  // depends on input channel
 
     // Select the ADC
-    ADC3_Select();
+    ADC2_Select();
 
     // Perform SPI communication with ADC128S102
     uint8_t receivedData3 = 0;
     for (int bit = 7; bit >= 0; --bit) {
         // Set the DIN pin
-        HAL_GPIO_WritePin(ADC3_GPIO_PORT, ADC3_DIN_PIN, (transmittedData3 >> bit) & 0x01);
+        HAL_GPIO_WritePin(ADC2_GPIO_D_PORT, ADC2_DIN_PIN, (transmittedData3 >> bit) & 0x01);
 
         // Clock high
         ADC3_ClockHigh();
 
         // Shift in received data bit
-        receivedData3 = (receivedData3 << 1) | HAL_GPIO_ReadPin(ADC3_GPIO_PORT, ADC3_DOUT_PIN);
+        receivedData3 = (receivedData3 << 1) | HAL_GPIO_ReadPin(ADC2_GPIO_D_PORT, ADC2_DOUT_PIN);
 
         // Clock low
-        ADC3_ClockLow();
+        ADC2_ClockLow();
     }
 
     // Deselect the ADC
-    ADC3_Deselect();
+    ADC2_Deselect();
 
     return receivedData3;
 }
@@ -424,29 +424,29 @@ uint8_t ADC_Vout_Reading4() {
 
 uint8_t ADC_Vout_Reading5() {  
     // Select input channel for VOUT
-    uint8_t transmittedData3 = 0x00;  // depends on input channel
+    uint8_t transmittedData3 = 0x1C;  // 0b00011100
 
     // Select the ADC
-    ADC3_Select();
+    ADC1_Select();
 
     // Perform SPI communication with ADC128S102
     uint8_t receivedData3 = 0;
     for (int bit = 7; bit >= 0; --bit) {
         // Set the DIN pin
-        HAL_GPIO_WritePin(ADC3_GPIO_PORT, ADC3_DIN_PIN, (transmittedData3 >> bit) & 0x01);
+        HAL_GPIO_WritePin(ADC1_GPIO_PORT, ADC1_DIN_PIN, (transmittedData3 >> bit) & 0x01);
 
         // Clock high
         ADC3_ClockHigh();
 
         // Shift in received data bit
-        receivedData3 = (receivedData3 << 1) | HAL_GPIO_ReadPin(ADC3_GPIO_PORT, ADC3_DOUT_PIN);
+        receivedData3 = (receivedData3 << 1) | HAL_GPIO_ReadPin(ADC1_GPIO_PORT, ADC1_DOUT_PIN);
 
         // Clock low
-        ADC3_ClockLow();
+        ADC1_ClockLow();
     }
 
     // Deselect the ADC
-    ADC3_Deselect();
+    ADC1_Deselect();
 
     return receivedData3;
 }
@@ -457,19 +457,19 @@ uint8_t ADC_Vout_Reading6() {
     uint8_t transmittedData3 = 0x00;  // depends on input channel
 
     // Select the ADC
-    ADC3_Select();
+    ADC2_Select();
 
     // Perform SPI communication with ADC128S102
     uint8_t receivedData3 = 0;
     for (int bit = 7; bit >= 0; --bit) {
         // Set the DIN pin
-        HAL_GPIO_WritePin(ADC3_GPIO_PORT, ADC3_DIN_PIN, (transmittedData3 >> bit) & 0x01);
+        HAL_GPIO_WritePin(ADC2_GPIO_D_PORT, ADC2_DIN_PIN, (transmittedData3 >> bit) & 0x01);
 
         // Clock high
-        ADC3_ClockHigh();
+        ADC2_ClockHigh();
 
         // Shift in received data bit
-        receivedData3 = (receivedData3 << 1) | HAL_GPIO_ReadPin(ADC3_GPIO_PORT, ADC3_DOUT_PIN);
+        receivedData3 = (receivedData3 << 1) | HAL_GPIO_ReadPin(ADC2_GPIO_PORT, ADC2_DOUT_PIN);
 
         // Clock low
         ADC3_ClockLow();
@@ -483,7 +483,7 @@ uint8_t ADC_Vout_Reading6() {
 
 uint8_t ADC_Vout_Reading7() {  
     // Select input channel for VOUT
-    uint8_t transmittedData3 = 0x00;  // depends on input channel
+    uint8_t transmittedData3 = 0x18;  // depends on input channel
 
     // Select the ADC
     ADC3_Select();
@@ -513,29 +513,29 @@ uint8_t ADC_Vout_Reading7() {
 
 uint8_t ADC_Vout_Reading8() {  
     // Select input channel for VOUT
-    uint8_t transmittedData3 = 0x00;  // depends on input channel
+    uint8_t transmittedData3 = 0x1C;  // 0b00011100
 
     // Select the ADC
-    ADC3_Select();
+    ADC2_Select();
 
     // Perform SPI communication with ADC128S102
     uint8_t receivedData3 = 0;
     for (int bit = 7; bit >= 0; --bit) {
         // Set the DIN pin
-        HAL_GPIO_WritePin(ADC3_GPIO_PORT, ADC3_DIN_PIN, (transmittedData3 >> bit) & 0x01);
+        HAL_GPIO_WritePin(ADC2_GPIO_D_PORT, ADC2_DIN_PIN, (transmittedData3 >> bit) & 0x01);
 
         // Clock high
         ADC3_ClockHigh();
 
         // Shift in received data bit
-        receivedData3 = (receivedData3 << 1) | HAL_GPIO_ReadPin(ADC3_GPIO_PORT, ADC3_DOUT_PIN);
+        receivedData3 = (receivedData3 << 1) | HAL_GPIO_ReadPin(ADC2_GPIO_D_PORT, ADC2_DOUT_PIN);
 
         // Clock low
-        ADC3_ClockLow();
+        ADC2_ClockLow();
     }
 
     // Deselect the ADC
-    ADC3_Deselect();
+    ADC2_Deselect();
 
     return receivedData3;
 }
