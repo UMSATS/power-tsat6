@@ -93,7 +93,7 @@ void handleADCSOff(void)
 
 void handleBatteryAccessOn(void)
 {
-  TPS22810_EnableBatPower();
+  EnableBatPower();
   CANMessage_t package;
   package.priority = 0b0000001;
   package.SenderID = SOURCE_ID;
@@ -108,7 +108,7 @@ void handleBatteryAccessOn(void)
 
 void handleBatteryAccessOff(void)
 {
-  TPS22810_DisableBatPower();
+  DisableBatPower();
   CANMessage_t package;
   package.priority = 0b0000000;
   package.SenderID = SOURCE_ID;

@@ -28,16 +28,11 @@
 #define LTC1154_HEATER_STATUS_PIN     Heat_Status_Pin
 #define LTC1154_HEATER_IN_PIN         Heat_In_Pin
 
-// definitions for BATV NESS mosfet drivers
+// definitions for BATV mosfet driver
 #define LTC1154_BATV_1_GPIO_Port       GPIOB
 #define LTC1154_BATV_1_ENABLE_PIN      BatV1_EN_Pin
 #define LTC1154_BATV_1_STATUS_PIN      BatV1_Status_Pin
 #define LTC1154_BATV_1_IN_PIN          BatV1_In_Pin
-#define LTC1154_BATV_2_GPIO_Port       GPIOB
-#define LTC1154_BATV_2_ENABLE_PIN      BatV2_EN_Pin
-#define LTC1154_BATV_2_STATUS_PIN      BatV2_Status_Pin
-#define LTC1154_BATV_2_IN_PIN          BatV2_In_Pin
-
 
 //###############################################################################################
 //Prototypes
@@ -131,40 +126,23 @@ void LTC1154_BATV_1_SetIn(GPIO_PinState state);
 
 
 /*
- * FUNCTION: LTC1154_BATV_2_GetStatus
+ * FUNCTION: EnableBatPower
  *
- * DESCRIPTION: Reads and returns state of battery voltage . 
+ * DESCRIPTION: Enable power to Battery module. 
+ *
  */
 
 
-GPIO_PinState LTC1154_BATV_2_GetStatus(void);
-
+void EnableBatPower(void);
 
 /*
- * FUNCTION: LTC1154_BATV_2_SetEnable
+ * FUNCTION: DisableBatPower
  *
- * DESCRIPTION: Controls the functionality of the Battery voltage.
- * 
- * PARAMETERS:
- * state: state (high or low) of battery voltage.
+ * DESCRIPTION: Disable power to Battery module. 
+ *
  */
 
-
-
-void LTC1154_BATV_2_SetEnable(GPIO_PinState state);
-
-
-/*
- * FUNCTION: LTC1154_BATV_2_SetIn
- *
- * DESCRIPTION: Controls the switching operation of the battery voltage (conducting or non conducting).
- * 
- * PARAMETERS:
- * state: state (high or low) of battery voltage.
- */
-
-
-void LTC1154_BATV_2_SetIn(GPIO_PinState state);
+void DisableBatPower(void);
 
 #endif /* HARDWARE_PERIPHERALS_INC_LTC11_DRIVER_H_ */
 

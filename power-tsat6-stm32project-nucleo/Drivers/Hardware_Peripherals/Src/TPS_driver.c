@@ -22,7 +22,6 @@ void TPS22810_Init()
 {
     TPS22810_EnableADCSPower();
     TPS22810_EnablePayloadPower();
-    TPS22810_EnableBatPower();
     
 }
 
@@ -44,14 +43,4 @@ void TPS22810_EnableADCSPower()
 void TPS22810_DisableADCSPower()
 {
     HAL_GPIO_WritePin(TPS22810_GPIO_Port, TPS22810_ADCS_PWR_EN_PIN, GPIO_PIN_RESET);
-}
-
-void TPS22810_EnableBatPower()
-{
-    HAL_GPIO_WritePin(TPS22810_GPIO_Port, TPS22810_BAT_PWR_EN_PIN, GPIO_PIN_SET);
-}
-
-void TPS22810_DisableBatPower()
-{
-    HAL_GPIO_WritePin(TPS22810_GPIO_Port, TPS22810_BAT_PWR_EN_PIN, GPIO_PIN_RESET);
 }

@@ -671,21 +671,16 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : CC_Int_Pin BatV2_Status_Pin */
-  GPIO_InitStruct.Pin = CC_Int_Pin|BatV2_Status_Pin;
+  /*Configure GPIO pins : CC_Int_Pin */
+  GPIO_InitStruct.Pin = CC_Int_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : BatV2_In_Pin */
-  GPIO_InitStruct.Pin = BatV2_In_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(BatV2_In_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : BatV2_EN_Pin BatV1_Status_Pin BatV1_In_Pin Heat_In_Pin
+  
+  /*Configure GPIO pins :  BatV1_Status_Pin BatV1_In_Pin Heat_In_Pin
                            Heat_EN_Pin */
-  GPIO_InitStruct.Pin = BatV2_EN_Pin|BatV1_Status_Pin|BatV1_In_Pin|Heat_In_Pin
+  GPIO_InitStruct.Pin = BatV1_Status_Pin|BatV1_In_Pin|Heat_In_Pin
                           |Heat_EN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
@@ -722,6 +717,7 @@ void Error_Handler(void)
   __disable_irq();
   while (1)
   {
+
   }
   /* USER CODE END Error_Handler_Debug */
 }

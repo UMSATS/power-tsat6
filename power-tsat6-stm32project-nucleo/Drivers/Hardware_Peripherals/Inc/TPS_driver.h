@@ -78,25 +78,7 @@ void TPS22810_EnableADCSPower(void);
 
 void TPS22810_DisableADCSPower(void);
 
-/*
- * FUNCTION: TPS22810_EnableBatPower
- *
- * DESCRIPTION: Enable power to Battery module. 
- *
- */
 
-
-void TPS22810_EnableBatPower(void);
-
-/*
- * FUNCTION: TPS22810_DisableBatPower
- *
- * DESCRIPTION: Disable power to Battery module. 
- *
- */
-
-
-void TPS22810_DisableBatPower(void);
 
 
 

@@ -66,23 +66,13 @@ void LTC1154_BATV_1_SetIn(GPIO_PinState state)
 }
 
 
-//Mosfet Driver 3
-
-
-GPIO_PinState LTC1154_BATV_2_GetStatus(void)
+void EnableBatPower(void)
 {
-    return HAL_GPIO_ReadPin(LTC1154_BATV_2_GPIO_Port, LTC1154_BATV_2_STATUS_PIN);
+    HAL_GPIO_WritePin(LTC1154_BATV_1_GPIO_Port, LTC1154_BATV_1_ENABLE_PIN, GPIO_PIN_SET);
 }
 
-void LTC1154_BATV_2_SetEnable(GPIO_PinState state)
+void DisableBatPower(void)
 {
-    HAL_GPIO_WritePin(LTC1154_BATV_2_GPIO_Port, LTC1154_BATV_2_ENABLE_PIN, state);
+    HAL_GPIO_WritePin(LTC1154_BATV_1_GPIO_Port, LTC1154_BATV_1_ENABLE_PIN, GPIO_PIN_RESET);
 }
-
-void LTC1154_BATV_2_SetIn(GPIO_PinState state)
-{
-    HAL_GPIO_WritePin(LTC1154_BATV_2_GPIO_Port, LTC1154_BATV_2_IN_PIN, state);
-}
-
-
 
