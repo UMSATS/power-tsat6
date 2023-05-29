@@ -42,12 +42,32 @@ typedef struct{
 //###############################################################################################
 // Public Function Prototypes
 //###############################################################################################
-HAL_StatusTypeDef CAN_Init(); // Initializes and Starts the CAN Bus
+/*
+ * FUNCTION: CAN_Queue_IsEmpty
+ *
+ * DESCRIPTION: Initializes and Starts the CAN Bus.
+ *
+ */
+
+HAL_StatusTypeDef CAN_Init(); 
+
+/*
+ * FUNCTION: CAN_Transmit_Message
+ *
+ * DESCRIPTION: Uses the message struct to send messages on the CAN Bus. 
+ *
+ */
 
 HAL_StatusTypeDef CAN_Transmit_Message(
-        CANMessage_t myMessage // Uses the message struct to send messages
+        CANMessage_t myMessage 
 );
 
-HAL_StatusTypeDef CAN_Message_Received(); // Interrupt handler for the CAN Bus
+/*
+ * FUNCTION: CAN_Message_Received
+ *
+ * DESCRIPTION: Interrupt handler for the CAN Bus.
+ *
+ */
+HAL_StatusTypeDef CAN_Message_Received(); 
 
 #endif /* INCLUDE_CAN_H_ */

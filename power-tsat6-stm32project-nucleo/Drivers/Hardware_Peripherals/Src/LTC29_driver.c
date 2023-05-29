@@ -8,7 +8,6 @@
  *
  * CREATED ON: May 16, 2023
  */
-
 //###############################################################################################
 //Include Directives
 //###############################################################################################
@@ -21,19 +20,16 @@
 
 void LTC2917_Init()
 {
-    // Initialize the RST and WDI pins as outputs
     HAL_GPIO_WritePin(LTC2917_GPIO_Port, LTC2917_RST_Pin, GPIO_PIN_SET);
     HAL_GPIO_WritePin(LTC2917_GPIO_Port, LTC2917_WDI_Pin, GPIO_PIN_RESET);
 }
 
 void LTC2917_Manual_Reset()
 {
-    // Pull the RST pin low 
     HAL_GPIO_WritePin(LTC2917_GPIO_Port, LTC2917_RST_Pin, GPIO_PIN_RESET);
 }
 
 void LTC2917_WDI_Toggle()
 {
-    // Toggle the WDI pin
     HAL_GPIO_TogglePin(LTC2917_GPIO_Port, LTC2917_WDI_Pin);
 }

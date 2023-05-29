@@ -8,8 +8,6 @@
  *
  * CREATED ON: May 16, 2023
  */
-
-
 //###############################################################################################
 //Include Directives
 //###############################################################################################
@@ -30,36 +28,30 @@ void TPS22810_Init()
 
 void TPS22810_EnablePayloadPower()
 {
-    // Enable the payload power 
     HAL_GPIO_WritePin(TPS22810_GPIO_Port, TPS22810_PAYLOAD_PWR_EN_PIN, GPIO_PIN_SET);
 }
 
 void TPS22810_DisablePayloadPower()
 {
-    // Disable the payload power 
     HAL_GPIO_WritePin(TPS22810_GPIO_Port, TPS22810_PAYLOAD_PWR_EN_PIN, GPIO_PIN_RESET);
 }
 
 void TPS22810_EnableADCSPower()
 {
-    // Enable the ADCS power 
     HAL_GPIO_WritePin(TPS22810_GPIO_Port, TPS22810_ADCS_PWR_EN_PIN, GPIO_PIN_SET);
 }
 
 void TPS22810_DisableADCSPower()
 {
-    // Disable the ADCS power 
     HAL_GPIO_WritePin(TPS22810_GPIO_Port, TPS22810_ADCS_PWR_EN_PIN, GPIO_PIN_RESET);
 }
 
 void TPS22810_EnableBatPower()
 {
-    // Enable the battery power
     HAL_GPIO_WritePin(TPS22810_GPIO_Port, TPS22810_BAT_PWR_EN_PIN, GPIO_PIN_SET);
 }
 
 void TPS22810_DisableBatPower()
 {
-    // Disable the battery power 
     HAL_GPIO_WritePin(TPS22810_GPIO_Port, TPS22810_BAT_PWR_EN_PIN, GPIO_PIN_RESET);
 }

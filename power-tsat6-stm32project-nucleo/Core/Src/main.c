@@ -193,8 +193,6 @@ int main(void)
   /* USER CODE END 3 */
 }
 
-
-
 /**
  * @brief Collects and sends telemetry information to CDH
  * @retval None

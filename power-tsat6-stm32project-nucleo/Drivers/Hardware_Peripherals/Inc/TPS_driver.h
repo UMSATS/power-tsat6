@@ -1,4 +1,3 @@
-
 /*
  * FILENAME: TPS_driver.h
  *
@@ -24,37 +23,77 @@
 
 #define TPS22810_GPIO_Port                     GPIOA
 #define TPS22810_PAYLOAD_PWR_EN_PIN            Payload_PWR_Pin
-
-//#define TPS22810_GPIO_Port                     GPIOE
 #define TPS22810_ADCS_PWR_EN_PIN               ADCS_PWR_Pin
-
-//#define TPS22810_GPIO_Port                     GPIOE
 #define TPS22810_BAT_PWR_EN_PIN                Battery_PWR_Pin
-
 
 //###############################################################################################
 //Prototypes
 //###############################################################################################
 
+/*
+ * FUNCTION: TPS22810_Init
+ *
+ * DESCRIPTION: Initialize the load switches by enabling power to subsystems. 
+ *
+ */
+
 void TPS22810_Init(void);
 
-// prototypes for Payload power 
+/*
+ * FUNCTION: TPS22810_EnablePayloadPower
+ *
+ * DESCRIPTION: Enable power to payload subsystem. 
+ *
+ */
+
 
 void TPS22810_EnablePayloadPower(void);
 
+/*
+ * FUNCTION: TPS22810_DisablePayloadPower
+ *
+ * DESCRIPTION: Disable power to payload subsystem. 
+ *
+ */
 
 void TPS22810_DisablePayloadPower(void);
 
+/*
+ * FUNCTION: TPS22810_EnableADCSPower
+ *
+ * DESCRIPTION: Enable power to ADCS subsystem. 
+ *
+ */
 
-// prototypes for ADCS power 
+
 void TPS22810_EnableADCSPower(void);
+
+/*
+ * FUNCTION: TPS22810_DisableADCSPower
+ *
+ * DESCRIPTION: Disable power to ADCS subsystem. 
+ *
+ */
 
 
 void TPS22810_DisableADCSPower(void);
 
+/*
+ * FUNCTION: TPS22810_EnableBatPower
+ *
+ * DESCRIPTION: Enable power to Battery module. 
+ *
+ */
 
-//prototypes for Battery power 
+
 void TPS22810_EnableBatPower(void);
+
+/*
+ * FUNCTION: TPS22810_DisableBatPower
+ *
+ * DESCRIPTION: Disable power to Battery module. 
+ *
+ */
 
 
 void TPS22810_DisableBatPower(void);

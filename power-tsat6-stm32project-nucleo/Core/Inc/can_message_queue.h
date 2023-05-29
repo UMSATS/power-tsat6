@@ -97,3 +97,5 @@ bool CAN_Queue_Enqueue(CANQueue_t* queue, CANMessage_t* message);
 bool CAN_Queue_Dequeue(CANQueue_t* queue, CANMessage_t* message);
 
 #endif /* INCLUDE_CAN_MESSAGE_QUEUE_H_ */
+
+

@@ -46,8 +46,7 @@
 #define ADC3_CS_PIN     ADC3_CS_Pin
 #define ADC3_SCLK_PIN   ADC3_CLCK_Pin
 
-
-//for current readings
+// Current Sensors
 #define SHUNT_RESISTOR1   0.02f
 #define SHUNT_RESISTOR2   0.02f
 #define SHUNT_RESISTOR3   0.02f
@@ -56,24 +55,19 @@
 #define SHUNT_RESISTOR6   0.03f
 #define SHUNT_RESISTOR7   0.015f
 #define SHUNT_RESISTOR8   0.015f
-
-// current sensor ids 
-#define CURRENT_SENSOR_ID_1 0x8
-#define CURRENT_SENSOR_ID_2 0x10
-#define CURRENT_SENSOR_ID_3 0x12
-#define CURRENT_SENSOR_ID_4 0x11
-#define CURRENT_SENSOR_ID_5 0x13
-#define CURRENT_SENSOR_ID_6 0x14
-#define CURRENT_SENSOR_ID_7 0x15
-#define CURRENT_SENSOR_ID_8 0x16
-
-
+#define CURRENT_SENSOR_ID_1 0x8  //U8
+#define CURRENT_SENSOR_ID_2 0x10 //U10
+#define CURRENT_SENSOR_ID_3 0x12 //U12
+#define CURRENT_SENSOR_ID_4 0x11 //U11
+#define CURRENT_SENSOR_ID_5 0x13 //U13
+#define CURRENT_SENSOR_ID_6 0x14 //U14
+#define CURRENT_SENSOR_ID_7 0x15 //U15 
+#define CURRENT_SENSOR_ID_8 0x16 //U16 
 
 
 //###############################################################################################
 // Enumeration
 //###############################################################################################
-
 
 typedef enum {
 	ADC12_HAL_OK 		= HAL_OK,
@@ -86,47 +80,223 @@ typedef enum {
 //Prototypes
 //###############################################################################################
 
-//ADC12_StatusTypeDef ADC_SPI_Configuration1();
+
+/*
+ * FUNCTION: ADC1_Select
+ *
+ * DESCRIPTION: Selects ADC A.
+ */
+
+void ADC1_Select(void);
+
+/*
+ * FUNCTION: ADC1_Deselect
+ *
+ * DESCRIPTION: Deselects ADC A.
+ */
+
+void ADC1_Deselect(void);
+
+
+/*
+ * FUNCTION: ADC1_ClockHigh
+ *
+ * DESCRIPTION: Sets ADC A clock to high.
+ */
+
+void ADC1_ClockHigh(void);
+
+
+/*
+ * FUNCTION: ADC1_ClockLow
+ *
+ * DESCRIPTION: Sets ADC A clock to low.
+ */
+
+void ADC1_ClockLow(void);
+
+
+/*
+ * FUNCTION: ADC3_ReadValues
+ *
+ * DESCRIPTION: Reads values through MISO pin on ADC A, interacting through SPI communication interface. 
+ * 
+ * PARAMETERS:
+ * values: 16 bit array where ADC values read will be stored.
+ * numValues: number of ADC values to be read.
+ * 
+ */
 
 ADC12_StatusTypeDef ADC1_ReadValues(uint16_t* values, size_t numValues);
 
-//ADC12_StatusTypeDef ADC_SPI_Configuration2();
+
+/*
+ * FUNCTION: ADC2_Select
+ *
+ * DESCRIPTION: Selects ADC B.
+ */
+
+void ADC2_Select(void);
+
+/*
+ * FUNCTION: ADC2_Deselect
+ *
+ * DESCRIPTION: Deselects ADC B.
+ */
+
+void ADC2_Deselect(void);
+
+
+/*
+ * FUNCTION: ADC2_ClockHigh
+ *
+ * DESCRIPTION: Sets ADC B clock to high.
+ */
+
+
+void ADC2_ClockHigh(void);
+
+
+/*
+ * FUNCTION: ADC2_ClockLow
+ *
+ * DESCRIPTION: Sets ADC B clock to low.
+ */
+
+void ADC2_ClockLow(void);
+
+
+/*
+ * FUNCTION: ADC3_ReadValues
+ *
+ * DESCRIPTION: Reads values through MISO pin on ADC B, interacting through SPI communication interface. 
+ * 
+ * PARAMETERS:
+ * values: 16 bit array where ADC values read will be stored.
+ * numValues: number of ADC values to be read.
+ * 
+ */
 
 ADC12_StatusTypeDef ADC2_ReadValues(uint16_t* values, size_t numValues);
 
-//ADC12_StatusTypeDef ADC_SPI_Configuration3();
+/*
+ * FUNCTION: ADC3_Select
+ *
+ * DESCRIPTION: Selects ADC C.
+ */
+
+void ADC3_Select(void);
+
+
+/*
+ * FUNCTION: ADC3_Deselect
+ *
+ * DESCRIPTION: Deselects ADC C.
+ */
+
+void ADC3_Deselect(void);
+
+/*
+ * FUNCTION: ADC3_ClockHigh
+ *
+ * DESCRIPTION: Sets ADC C clock to high.
+ */
+
+void ADC3_ClockHigh(void);
+
+/*
+ * FUNCTION: ADC3_ClockHigh
+ *
+ * DESCRIPTION: Sets ADC C clock to high.
+ */
+
+void ADC3_ClockLow(void);
+
+/*
+ * FUNCTION: ADC3_ReadValues
+ *
+ * DESCRIPTION: Reads values through MISO pin on ADC C, interacting through SPI communication interface. 
+ * 
+ * PARAMETERS:
+ * values: 16 bit array where ADC values read will be stored.
+ * numValues: number of ADC values to be read.
+ * 
+ */
 
 ADC12_StatusTypeDef ADC3_ReadValues(uint16_t* values, size_t numValues);
+
+/*
+ * FUNCTION: ADC3_ReadValue_BatteryTemp
+ *
+ * DESCRIPTION: Reads Battery Temperature through channel 7 on ADC C.
+ */
 
 
 uint16_t ADC3_ReadValue_BatteryTemp();
 
-
-
-
-void ADC1_Select(void);
-void ADC1_Deselect(void);
-void ADC1_ClockHigh(void);
-void ADC1_ClockLow(void);
-void ADC2_Select(void);
-void ADC2_Deselect(void);
-void ADC2_ClockHigh(void);
-void ADC2_ClockLow(void);
-void ADC3_Select(void);
-void ADC3_Deselect(void);
-void ADC3_ClockHigh(void);
-void ADC3_ClockLow(void);
-
+/*
+ * FUNCTION: ADC_Vout_Reading1
+ *
+ * DESCRIPTION: Reads output voltage from current sensor U8.
+ */
 
 uint8_t ADC_Vout_Reading1();
-uint8_t ADC_Vout_Reading2();
-uint8_t ADC_Vout_Reading3();
-uint8_t ADC_Vout_Reading4();
-uint8_t ADC_Vout_Reading5();
-uint8_t ADC_Vout_Reading6();
-uint8_t ADC_Vout_Reading7();
-uint8_t ADC_Vout_Reading8();
 
+/*
+ * FUNCTION: ADC_Vout_Reading2
+ *
+ * DESCRIPTION: Reads output voltage from current sensor U10.
+ */
+
+uint8_t ADC_Vout_Reading2();
+
+/*
+ * FUNCTION: ADC_Vout_Reading3
+ *
+ * DESCRIPTION: Reads output voltage from current sensor U12.
+ */
+
+uint8_t ADC_Vout_Reading3();
+
+/*
+ * FUNCTION: ADC_Vout_Reading4
+ *
+ * DESCRIPTION: Reads output voltage from current sensor U11.
+ */
+
+uint8_t ADC_Vout_Reading4();
+
+/*
+ * FUNCTION: ADC_Vout_Reading5
+ *
+ * DESCRIPTION: Reads output voltage from current sensor U13.
+ */
+
+uint8_t ADC_Vout_Reading5();
+
+/*
+ * FUNCTION: ADC_Vout_Reading6
+ *
+ * DESCRIPTION: Reads output voltage from current sensor U14.
+ */
+
+uint8_t ADC_Vout_Reading6();
+
+/*
+ * FUNCTION: ADC_Vout_Reading7
+ *
+ * DESCRIPTION: Reads output voltage from current sensor U15.
+ */
+
+uint8_t ADC_Vout_Reading7();
+
+/*
+ * FUNCTION: ADC_Vout_Reading8
+ *
+ * DESCRIPTION: Reads output voltage from current sensor U16.
+ */
+
+uint8_t ADC_Vout_Reading8();
 
 
 #endif /* HARDWARE_PERIPHERALS_INC_ADC12_DRIVER_H_ */

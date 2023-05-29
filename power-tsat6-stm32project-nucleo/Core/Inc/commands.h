@@ -1,7 +1,7 @@
 /*
  * FILENAME: commands.h
  *
- * DESCRIPTION: Handlers for different commands from CDH
+ * DESCRIPTION: Header file for commands.c.
  * AUTHORS:
  *  - Eran Efron (eran.efron@umsats.ca)
  *
