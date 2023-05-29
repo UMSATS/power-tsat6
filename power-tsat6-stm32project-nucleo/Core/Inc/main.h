@@ -22,14 +22,12 @@
 #ifndef __MAIN_H
 #define __MAIN_H
 
-#ifdef __cplusplus"
+#ifdef __cplusplus
 extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32l4xx_hal.h"
-#include "commands.h"
-#include "can_message_queue.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -109,8 +107,6 @@ void Error_Handler(void);
 #define CC_Pol_GPIO_Port GPIOA
 #define CC_Int_Pin GPIO_PIN_9
 #define CC_Int_GPIO_Port GPIOA
-#define Battery_PWR_Pin GPIO_PIN_10
-#define Battery_PWR_GPIO_Port GPIOA
 #define ADCS_PWR_Pin GPIO_PIN_11
 #define ADCS_PWR_GPIO_Port GPIOA
 #define Payload_PWR_Pin GPIO_PIN_12
