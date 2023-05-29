@@ -1,0 +1,740 @@
+/* USER CODE BEGIN Header */
+/**
+  ******************************************************************************
+  * @file           : main.c
+  * @brief          : Main program body
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2023 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+/* USER CODE END Header */
+/* Includes ------------------------------------------------------------------*/
+#include "main.h"
+
+/* Private includes ----------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
+#include <stdio.h>
+#include <stdlib.h>
+#include "stm32l4xx_hal.h"
+#include "ADC12_driver.h"
+#include "LT365_driver.h"
+#include "LTC11_driver.h"
+#include "LTC29_driver.h"
+#include "LTC41_driver.h"
+#include "spi_config.h"
+#include "TPS_driver.h"
+#include "can_message_queue.h"
+#include "can.h"
+
+/* USER CODE END Includes */
+
+/* Private typedef -----------------------------------------------------------*/
+/* USER CODE BEGIN PTD */
+
+/* USER CODE END PTD */
+
+/* Private define ------------------------------------------------------------*/
+/* USER CODE BEGIN PD */
+
+/* USER CODE END PD */
+
+/* Private macro -------------------------------------------------------------*/
+/* USER CODE BEGIN PM */
+
+/* USER CODE END PM */
+
+/* Private variables ---------------------------------------------------------*/
+CAN_HandleTypeDef hcan1;
+
+SPI_HandleTypeDef hspi1;
+SPI_HandleTypeDef hspi2;
+SPI_HandleTypeDef hspi3;
+
+UART_HandleTypeDef huart2;
+
+/* USER CODE BEGIN PV */
+
+/* USER CODE END PV */
+
+/* Private function prototypes -----------------------------------------------*/
+void SystemClock_Config(void);
+static void MX_GPIO_Init(void);
+static void MX_USART2_UART_Init(void);
+static void MX_CAN1_Init(void);
+static void MX_SPI1_Init(void);
+static void MX_SPI2_Init(void);
+static void MX_SPI3_Init(void);
+/* USER CODE BEGIN PFP */
+
+
+
+
+/* USER CODE END PFP */
+
+/* Private user code ---------------------------------------------------------*/
+/* USER CODE BEGIN 0 */
+
+/* USER CODE END 0 */
+
+/**
+  * @brief  The application entry point.
+  * @retval int
+  */
+int main(void)
+{
+  /* USER CODE BEGIN 1 */
+
+  /* USER CODE END 1 */
+
+  /* MCU Configuration--------------------------------------------------------*/
+
+  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+  HAL_Init();
+
+  /* USER CODE BEGIN Init */
+
+  /* USER CODE END Init */
+
+  /* Configure the system clock */
+  SystemClock_Config();
+
+  /* USER CODE BEGIN SysInit */
+
+  /* USER CODE END SysInit */
+
+  /* Initialize all configured peripherals */
+  MX_GPIO_Init();
+  MX_USART2_UART_Init();
+  MX_CAN1_Init();
+  MX_SPI1_Init();
+  MX_SPI2_Init();
+  MX_SPI3_Init();
+  /* USER CODE BEGIN 2 */
+
+
+  CAN_Queue_Init(&can_queue);
+
+  ADC1_Deselect();
+
+  ADC2_Deselect();
+
+  ADC3_Deselect();
+
+  HAL_StatusTypeDef can_operation_status;
+  can_operation_status = CAN_Init();
+  if (can_operation_status != HAL_OK) goto error;
+
+
+  /* USER CODE END 2 */
+
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
+  while (1)
+  {
+
+    // Send telemetry information to CDH every minute
+    updateCDH();
+
+    if(!CAN_Queue_IsEmpty(&can_queue))
+      {
+          CANMessage_t package;
+          CAN_Queue_Dequeue(&can_queue, &package);
+    if(package.command == 0xC0) {
+			handleReset();
+
+		} elif(package.command == 0xC1) {
+
+			handlePLDOn();
+
+		} elif(package.command == 0xC2) {
+			handlePLDOff();
+
+
+		} elif(package.command == 0xC3) {
+			handleADCSOn();
+
+		} elif(package.command == 0xC4) {
+
+			handleADCSOff();
+
+		} elif(package.command == 0xC5) {
+
+			handleBatteryAccessOn();
+
+		} elif(package.command == 0xC6) {
+
+			handleBatteryAccessOff();
+
+		} elif(package.command == 0xC7) {
+
+			handleBatteryHeaterOn();
+
+		}  elif(package.command == 0xC8) {
+
+			handleBatteryHeaterOff();
+			
+		}  elif(package.command == 0xC9) {
+			
+			handleCheckDCDCCOnverterStatus();
+			
+		}
+
+    // Delay for one minute
+    HAL_Delay(60000); // Delay in milliseconds 
+  }
+  /* USER CODE END 3 */
+}
+
+/**
+ * @brief Collects and sends telemetry information to CDH
+ * @retval None
+ * 
+ */
+void updateCDH(void)
+{
+
+  //temperature reading 
+  uint16_t batteryTemperatureReading= ADC3_ReadValue_BatteryTemp(); // read as 16 bits
+  CANMessage_t packageTemp;
+
+  packageTemp.priority = 0b0000001;//priority of the original command (replace with an enum for readability?)
+  packageTemp.SenderID = SOURCE_ID;
+  packageTemp.DestinationID = 0x1; // cdh destination
+  packageTemp.command = 0x30;
+  packageTemp.data[0] = (batteryTemperatureReading >> 8) & 0xFF;  // Higher byte of the temperature
+  packageTemp.data[1] = batteryTemperatureReading & 0xFF;  // Lower byte of the temperature
+
+
+   operation_status = CAN_Transmit_Message(packageTemp);
+    if (operation_status != HAL_OK) goto error;
+
+  //read voltages
+  uint8_t voltage1 = ADC_Vout_Reading1();
+  uint8_t voltage2 = ADC_Vout_Reading2();
+  uint8_t voltage3 = ADC_Vout_Reading3();
+  uint8_t voltage4 = ADC_Vout_Reading4();
+  uint8_t voltage5 = ADC_Vout_Reading5();
+  uint8_t voltage6 = ADC_Vout_Reading6();
+  uint8_t voltage7 = ADC_Vout_Reading7();
+  uint8_t voltage8 = ADC_Vout_Reading8();
+  uint8_t voltage9 = ADC_Vout_Reading9();
+
+  // read currents 
+  uint8_t current1 = static_cast<uint8_t>(static_cast<float>(voltage1) / SHUNT_RESISTOR1);
+  uint8_t current2 = static_cast<uint8_t>(static_cast<float>(voltage2) / SHUNT_RESISTOR2);
+  uint8_t current3 = static_cast<uint8_t>(static_cast<float>(voltage3) / SHUNT_RESISTOR3);
+  uint8_t current4 = static_cast<uint8_t>(static_cast<float>(voltage4) / SHUNT_RESISTOR4);
+  uint8_t current5 = static_cast<uint8_t>(static_cast<float>(voltage5) / SHUNT_RESISTOR5);
+  uint8_t current6 = static_cast<uint8_t>(static_cast<float>(voltage6) / SHUNT_RESISTOR6);
+  uint8_t current7 = static_cast<uint8_t>(static_cast<float>(voltage7) / SHUNT_RESISTOR7);
+  uint8_t current8 = static_cast<uint8_t>(static_cast<float>(voltage8) / SHUNT_RESISTOR8);
+
+  CANMessage_t packageCurrent1;
+  packageCurrent.priority = 0b0000001;//priority of the original command (replace with an enum for readability?)
+  packageCurrent.SenderID = SOURCE_ID;
+  packageCurrent.DestinationID = 0x1; // cdh destination
+  packageCurrent.command = 0x32;
+  packageCurrent.data[0] = CURRENT_SENSOR_ID_1;
+  packageCurrent.data[1] = current1;
+
+
+  operation_status = CAN_Transmit_Message(packageCurrent1);
+    if (operation_status != HAL_OK) goto error;
+
+  CANMessage_t packageCurrent2;
+  packageCurrent2.priority = 0b0000001;//priority of the original command (replace with an enum for readability?)
+  packageCurrent2.SenderID = SOURCE_ID;
+  packageCurrent2.DestinationID = 0x1; // cdh destination
+  packageCurrent2.command = 0x32;
+  packageCurrent2.data[0] = CURRENT_SENSOR_ID_2;
+  packageCurrent2.data[1] = current2;
+
+  operation_status = CAN_Transmit_Message(packageCurrent2);
+    if (operation_status != HAL_OK) goto error;
+
+  CANMessage_t packageCurrent3;
+  packageCurrent3.priority = 0b0000001;//priority of the original command (replace with an enum for readability?)
+  packageCurrent3.SenderID = SOURCE_ID;
+  packageCurrent3.DestinationID = 0x1; // cdh destination
+  packageCurrent3.command = 0x32;
+  packageCurrent3.data[0] = CURRENT_SENSOR_ID_3;
+  packageCurrent3.data[1] = current3;
+
+  operation_status = CAN_Transmit_Message(packageCurrent3);
+    if (operation_status != HAL_OK) goto error;
+
+  CANMessage_t packageCurrent4;
+  packageCurrent4.priority = 0b0000001;//priority of the original command (replace with an enum for readability?)
+  packageCurrent4.SenderID = SOURCE_ID;
+  packageCurrent4.DestinationID = 0x1; // cdh destination
+  packageCurrent4.command = 0x32;
+  packageCurrent4.data[0] = CURRENT_SENSOR_ID_4;
+  packageCurrent4.data[1] = current4;
+
+  operation_status = CAN_Transmit_Message(packageCurrent4);
+    if (operation_status != HAL_OK) goto error;
+
+  CANMessage_t packageCurrent5;
+  packageCurrent5.priority = 0b0000001;//priority of the original command (replace with an enum for readability?)
+  packageCurrent5.SenderID = SOURCE_ID;
+  packageCurrent5.DestinationID = 0x1; // cdh destination
+  packageCurrent5.command = 0x32;
+  packageCurrent5.data[0] = CURRENT_SENSOR_ID_5;
+  packageCurrent5.data[1] = current5;
+
+  operation_status = CAN_Transmit_Message(packageCurrent5);
+    if (operation_status != HAL_OK) goto error;
+
+  CANMessage_t packageCurrent6;
+  packageCurrent6.priority = 0b0000001;//priority of the original command (replace with an enum for readability?)
+  packageCurrent6.SenderID = SOURCE_ID;
+  packageCurrent6.DestinationID = 0x1; // cdh destination
+  packageCurrent6.command = 0x32;
+  packageCurrent6.data[0] = CURRENT_SENSOR_ID_6;
+  packageCurrent6.data[1] = current6;
+
+  operation_status = CAN_Transmit_Message(packageCurrent6);
+    if (operation_status != HAL_OK) goto error;
+
+
+  CANMessage_t packageCurrent7;
+  packageCurrent7.priority = 0b0000001;//priority of the original command (replace with an enum for readability?)
+  packageCurrent7.SenderID = SOURCE_ID;
+  packageCurrent7.DestinationID = 0x1; // cdh destination
+  packageCurrent7.command = 0x32;
+  packageCurrent7.data[0] = CURRENT_SENSOR_ID_7;
+  packageCurrent7.data[1] = current7;
+
+  operation_status = CAN_Transmit_Message(packageCurrent7);
+    if (operation_status != HAL_OK) goto error;
+
+  CANMessage_t packageCurrent8;
+  packageCurrent8.priority = 0b0000001;//priority of the original command (replace with an enum for readability?)
+  packageCurrent8.SenderID = SOURCE_ID;
+  packageCurrent8.DestinationID = 0x1; // cdh destination
+  packageCurrent8.command = 0x32;
+  packageCurrent8.data[0] = CURRENT_SENSOR_ID_8;
+  packageCurrent8.data[1] = current8;
+
+  operation_status = CAN_Transmit_Message(packageCurrent8);
+    if (operation_status != HAL_OK) goto error;
+
+
+  // battery charge 
+  uint32_t batteryChargeReading= charge;
+  CANMessage_t packageCharge;
+
+  packageCharge.priority = 0b0000001;//priority of the original command (replace with an enum for readability?)
+  packageCharge.SenderID = SOURCE_ID;
+  packageCharge.DestinationID = 0x1; // cdh destination
+  packageCharge.command = 0x31;
+  for (int i = 0; i < sizeof(status); ++i) {
+    packageCharge.data[i + 1] = (batteryChargeReading >> (8 * i)) & 0xFF;
+
+   operation_status = CAN_Transmit_Message(packageCharge);
+    if (operation_status != HAL_OK) goto error;
+
+
+
+
+
+
+}
+
+/**
+  * @brief System Clock Configuration
+  * @retval None
+  */
+void SystemClock_Config(void)
+{
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+
+  /** Configure the main internal regulator output voltage
+  */
+  if (HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Initializes the RCC Oscillators according to the specified parameters
+  * in the RCC_OscInitTypeDef structure.
+  */
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
+  RCC_OscInitStruct.PLL.PLLM = 1;
+  RCC_OscInitStruct.PLL.PLLN = 10;
+  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV7;
+  RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
+  RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Initializes the CPU, AHB and APB buses clocks
+  */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK)
+  {
+    Error_Handler();
+  }
+}
+
+/**
+  * @brief CAN1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_CAN1_Init(void)
+{
+
+  /* USER CODE BEGIN CAN1_Init 0 */
+
+  /* USER CODE END CAN1_Init 0 */
+
+  /* USER CODE BEGIN CAN1_Init 1 */
+
+  /* USER CODE END CAN1_Init 1 */
+  hcan1.Instance = CAN1;
+  hcan1.Init.Prescaler = 32;
+  hcan1.Init.Mode = CAN_MODE_NORMAL;
+  hcan1.Init.SyncJumpWidth = CAN_SJW_1TQ;
+  hcan1.Init.TimeSeg1 = CAN_BS1_1TQ;
+  hcan1.Init.TimeSeg2 = CAN_BS2_1TQ;
+  hcan1.Init.TimeTriggeredMode = DISABLE;
+  hcan1.Init.AutoBusOff = DISABLE;
+  hcan1.Init.AutoWakeUp = DISABLE;
+  hcan1.Init.AutoRetransmission = DISABLE;
+  hcan1.Init.ReceiveFifoLocked = DISABLE;
+  hcan1.Init.TransmitFifoPriority = DISABLE;
+  if (HAL_CAN_Init(&hcan1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN CAN1_Init 2 */
+
+  /* USER CODE END CAN1_Init 2 */
+
+}
+
+/**
+  * @brief Wrapper for CAN message recieved, sends to function in can.c
+  * @param None
+  * @retval None
+  */
+void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan1)
+{
+  HAL_StatusTypeDef operation_status;
+  operation_status = CAN_Message_Received();
+  if(operation_status != HAL_OK)
+  {
+    //implement error handling
+  }
+}
+
+/**
+  * @brief SPI1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_SPI1_Init(void)
+{
+
+  /* USER CODE BEGIN SPI1_Init 0 */
+
+  /* USER CODE END SPI1_Init 0 */
+
+  /* USER CODE BEGIN SPI1_Init 1 */
+
+  /* USER CODE END SPI1_Init 1 */
+  /* SPI1 parameter configuration*/
+  hspi1.Instance = SPI1;
+  hspi1.Init.Mode = SPI_MODE_MASTER;
+  hspi1.Init.Direction = SPI_DIRECTION_2LINES;
+  hspi1.Init.DataSize = SPI_DATASIZE_4BIT;
+  hspi1.Init.CLKPolarity = SPI_POLARITY_LOW;
+  hspi1.Init.CLKPhase = SPI_PHASE_1EDGE;
+  hspi1.Init.NSS = SPI_NSS_SOFT;
+  hspi1.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi1.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  hspi1.Init.TIMode = SPI_TIMODE_DISABLE;
+  hspi1.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  hspi1.Init.CRCPolynomial = 7;
+  hspi1.Init.CRCLength = SPI_CRC_LENGTH_DATASIZE;
+  hspi1.Init.NSSPMode = SPI_NSS_PULSE_ENABLE;
+  if (HAL_SPI_Init(&hspi1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN SPI1_Init 2 */
+
+  /* USER CODE END SPI1_Init 2 */
+
+}
+
+/**
+  * @brief SPI2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_SPI2_Init(void)
+{
+
+  /* USER CODE BEGIN SPI2_Init 0 */
+
+  /* USER CODE END SPI2_Init 0 */
+
+  /* USER CODE BEGIN SPI2_Init 1 */
+
+  /* USER CODE END SPI2_Init 1 */
+  /* SPI2 parameter configuration*/
+  hspi2.Instance = SPI2;
+  hspi2.Init.Mode = SPI_MODE_MASTER;
+  hspi2.Init.Direction = SPI_DIRECTION_2LINES;
+  hspi2.Init.DataSize = SPI_DATASIZE_4BIT;
+  hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
+  hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
+  hspi2.Init.NSS = SPI_NSS_SOFT;
+  hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  hspi2.Init.TIMode = SPI_TIMODE_DISABLE;
+  hspi2.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  hspi2.Init.CRCPolynomial = 7;
+  hspi2.Init.CRCLength = SPI_CRC_LENGTH_DATASIZE;
+  hspi2.Init.NSSPMode = SPI_NSS_PULSE_ENABLE;
+  if (HAL_SPI_Init(&hspi2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN SPI2_Init 2 */
+
+  /* USER CODE END SPI2_Init 2 */
+
+}
+
+/**
+  * @brief SPI3 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_SPI3_Init(void)
+{
+
+  /* USER CODE BEGIN SPI3_Init 0 */
+
+  /* USER CODE END SPI3_Init 0 */
+
+  /* USER CODE BEGIN SPI3_Init 1 */
+
+  /* USER CODE END SPI3_Init 1 */
+  /* SPI3 parameter configuration*/
+  hspi3.Instance = SPI3;
+  hspi3.Init.Mode = SPI_MODE_MASTER;
+  hspi3.Init.Direction = SPI_DIRECTION_2LINES;
+  hspi3.Init.DataSize = SPI_DATASIZE_4BIT;
+  hspi3.Init.CLKPolarity = SPI_POLARITY_LOW;
+  hspi3.Init.CLKPhase = SPI_PHASE_1EDGE;
+  hspi3.Init.NSS = SPI_NSS_SOFT;
+  hspi3.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_2;
+  hspi3.Init.FirstBit = SPI_FIRSTBIT_MSB;
+  hspi3.Init.TIMode = SPI_TIMODE_DISABLE;
+  hspi3.Init.CRCCalculation = SPI_CRCCALCULATION_DISABLE;
+  hspi3.Init.CRCPolynomial = 7;
+  hspi3.Init.CRCLength = SPI_CRC_LENGTH_DATASIZE;
+  hspi3.Init.NSSPMode = SPI_NSS_PULSE_ENABLE;
+  if (HAL_SPI_Init(&hspi3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN SPI3_Init 2 */
+
+  /* USER CODE END SPI3_Init 2 */
+
+}
+
+/**
+  * @brief USART2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USART2_UART_Init(void)
+{
+
+  /* USER CODE BEGIN USART2_Init 0 */
+
+  /* USER CODE END USART2_Init 0 */
+
+  /* USER CODE BEGIN USART2_Init 1 */
+
+  /* USER CODE END USART2_Init 1 */
+  huart2.Instance = USART2;
+  huart2.Init.BaudRate = 115200;
+  huart2.Init.WordLength = UART_WORDLENGTH_8B;
+  huart2.Init.StopBits = UART_STOPBITS_1;
+  huart2.Init.Parity = UART_PARITY_NONE;
+  huart2.Init.Mode = UART_MODE_TX_RX;
+  huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart2.Init.OverSampling = UART_OVERSAMPLING_16;
+  huart2.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
+  huart2.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  if (HAL_UART_Init(&huart2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USART2_Init 2 */
+
+  /* USER CODE END USART2_Init 2 */
+
+}
+
+/**
+  * @brief GPIO Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_GPIO_Init(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+/* USER CODE BEGIN MX_GPIO_Init_1 */
+/* USER CODE END MX_GPIO_Init_1 */
+
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOC_CLK_ENABLE();
+  __HAL_RCC_GPIOH_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOC, RUN_Pin|MPPT_Y_POS_SHDN_Pin|MPPT_Y_NEG_SHDN_Pin|WD_RST_Pin
+                          |WD_WDI_Pin|CC_SHDN_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, ADC1_CS_Pin|LD4_Pin|CC_Pol_Pin|Battery_PWR_Pin
+                          |ADCS_PWR_Pin|Payload_PWR_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, MPPT_X_POS_SHDN_Pin|MPPT_X_NEG_SHDN_Pin|ADC2_CS_Pin|ADC3_CS_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : B1_Pin */
+  GPIO_InitStruct.Pin = B1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(B1_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PGOOD_Pin CC_CLR_Pin */
+  GPIO_InitStruct.Pin = PGOOD_Pin|CC_CLR_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : RUN_Pin MPPT_Y_POS_SHDN_Pin MPPT_Y_NEG_SHDN_Pin WD_RST_Pin
+                           WD_WDI_Pin CC_SHDN_Pin */
+  GPIO_InitStruct.Pin = RUN_Pin|MPPT_Y_POS_SHDN_Pin|MPPT_Y_NEG_SHDN_Pin|WD_RST_Pin
+                          |WD_WDI_Pin|CC_SHDN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : ADC1_CS_Pin LD4_Pin CC_Pol_Pin Battery_PWR_Pin
+                           ADCS_PWR_Pin Payload_PWR_Pin */
+  GPIO_InitStruct.Pin = ADC1_CS_Pin|LD4_Pin|CC_Pol_Pin|Battery_PWR_Pin
+                          |ADCS_PWR_Pin|Payload_PWR_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : MPPT_X_POS_SHDN_Pin MPPT_X_NEG_SHDN_Pin ADC2_CS_Pin ADC3_CS_Pin */
+  GPIO_InitStruct.Pin = MPPT_X_POS_SHDN_Pin|MPPT_X_NEG_SHDN_Pin|ADC2_CS_Pin|ADC3_CS_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : CC_Int_Pin */
+  GPIO_InitStruct.Pin = CC_Int_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  
+  /*Configure GPIO pins :  BatV1_Status_Pin BatV1_In_Pin Heat_In_Pin
+                           Heat_EN_Pin */
+  GPIO_InitStruct.Pin = BatV1_Status_Pin|BatV1_In_Pin|Heat_In_Pin
+                          |Heat_EN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : BatV1_EN_Pin */
+  GPIO_InitStruct.Pin = BatV1_EN_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(BatV1_EN_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : Heat_Status_Pin */
+  GPIO_InitStruct.Pin = Heat_Status_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(Heat_Status_GPIO_Port, &GPIO_InitStruct);
+
+/* USER CODE BEGIN MX_GPIO_Init_2 */
+/* USER CODE END MX_GPIO_Init_2 */
+}
+
+/* USER CODE BEGIN 4 */
+
+/* USER CODE END 4 */
+
+/**
+  * @brief  This function is executed in case of error occurrence.
+  * @retval None
+  */
+void Error_Handler(void)
+{
+  /* USER CODE BEGIN Error_Handler_Debug */
+  /* User can add his own implementation to report the HAL error return state */
+  __disable_irq();
+  while (1)
+  {
+
+  }
+  /* USER CODE END Error_Handler_Debug */
+}
+
+#ifdef  USE_FULL_ASSERT
+/**
+  * @brief  Reports the name of the source file and the source line number
+  *         where the assert_param error has occurred.
+  * @param  file: pointer to the source file name
+  * @param  line: assert_param error line source number
+  * @retval None
+  */
+void assert_failed(uint8_t *file, uint32_t line)
+{
+  /* USER CODE BEGIN 6 */
+  /* User can add his own implementation to report the file name and line number,
+     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+  /* USER CODE END 6 */
+}
+#endif /* USE_FULL_ASSERT */
